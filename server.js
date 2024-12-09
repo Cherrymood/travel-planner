@@ -4,7 +4,7 @@ import logger from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import citiesRouter from "./server/routes/cities.js";
+import citiesRouter from "./server/routes/citiesRoutes.js";
 
 const app = express();
 const port = 3000;
@@ -23,7 +23,7 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use("cities", citiesRouter);
+app.use("/cities", citiesRouter);
 
 app.post("/login", async (req, res) => {
   console.log(req.body);

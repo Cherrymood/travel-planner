@@ -1,8 +1,8 @@
 import express from "express";
-import getCities from "../controllers/cities.js";
+import getCities from "../controllers/getCities.js";
 
 const citiesRouter = express.Router();
 
-citiesRouter.get("/cities", getCities);
+citiesRouter.get("/", getCities);
 
 export default citiesRouter;

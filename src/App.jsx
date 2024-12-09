@@ -12,7 +12,7 @@ import CountriesList from "./components/CountriesList";
 import City from "./components/City";
 import Form from "./components/Form";
 
-const BASE_URL = `http://localhost:3000`;
+const BASE_URL = `http://localhost:3000/`;
 
 export default function App() {
   const [cities, setCities] = useState([]);

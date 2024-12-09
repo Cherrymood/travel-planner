@@ -1,10 +1,14 @@
-const mongoose = require("mongoose");
+import { MongoClient, ServerApiVersion } from "mongodb";
 
-export default async function connectDB(url) {
-  return mongoose.connect(url, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
+// Function to create a MongoDB client with a dynamic URL
+export default async function createMongoBDClient(url) {
+  const client = new MongoClient(url, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    },
   });
+
+  return client;
 }

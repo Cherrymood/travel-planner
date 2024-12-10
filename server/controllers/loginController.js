@@ -5,16 +5,19 @@ export default async function handleLogin(req, res) {
   try {
     const login = req.body.email;
     const password = req.body.password;
+    console.log(password);
+    console.log(typeof password);
 
     await clientMongo.connect();
 
-    const user = await readUserDB(clientMongo, login);
+    const { result } = await readUserDB(clientMongo, login);
+    console.log({ result });
 
-    if (!user) {
+    if (!result) {
       return res.status(404).send("User not found");
     }
 
-    if (user.password !== password) {
+    if (result.password !== password) {
       return res.status(401).send("Invalid password");
     }
 

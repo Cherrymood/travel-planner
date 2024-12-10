@@ -12,7 +12,7 @@ export default async function handleSignup(req, res) {
     }
 
     // Check if the user already exists
-    const userExists = await readUserDB(clientMongo, email);
+    const { userExists } = await readUserDB(clientMongo, email);
     console.log(userExists);
 
     if (userExists) {

@@ -5,7 +5,6 @@ import styles from "./Login.module.css";
 import Button from "../components/Button.jsx";
 import GoogleBtn from "../components/GoogleBtn.jsx";
 import { Link } from "react-router-dom";
-import ButtonSignUp from "../components/ButtonSignUp.jsx";
 
 export default function Login() {
   const [email, setEmail] = useState("jack@example.com");

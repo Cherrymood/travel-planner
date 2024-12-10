@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 
 import citiesRouter from "./server/routes/citiesRoutes.js";
 import loginRoutes from "./server/routes/loginRoutes.js";
+import signupRoutes from "./server/routes/signupRoutes.js";
 
 const app = express();
 const port = 3000;
@@ -24,6 +25,7 @@ app.use(cookieParser());
 // ROUTES
 app.use("/cities", citiesRouter);
 app.use("/login", loginRoutes);
+app.use("/signup", signupRoutes);
 
 // Start Server
 app.listen(port, () => {

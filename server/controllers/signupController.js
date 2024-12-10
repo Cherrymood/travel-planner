@@ -1,6 +1,7 @@
 import { clientMongo } from "../db/connectDB.js";
 import createUserDB from "../db/createUserDB.js";
 import readUserDB from "../db/readUserDB.js";
+import hashBCRypt from "./hashingController.js";
 
 export default async function handleSignup(req, res) {
   try {
@@ -19,15 +20,22 @@ export default async function handleSignup(req, res) {
       return res.status(409).send("User already exists");
     }
 
+    // Hash the password before storing it
+    const hashedPassword = await hashBCRypt(password);
+    console.log(hashedPassword);
+
     // Create a new user
-    const newUser = await createUserDB(clientMongo, { name, email, password });
+    await createUserDB(clientMongo, {
+      name,
+      email,
+      password: hashedPassword,
+    });
 
     return res.status(201).send(`User created successfully: ${name}`);
   } catch (error) {
     console.error("Signup error:", error);
     res.status(500).send("Internal server error");
   } finally {
-    // Close the client connection if it's connected
     if (clientMongo.topology && clientMongo.topology.isConnected()) {
       await clientMongo.close();
     }

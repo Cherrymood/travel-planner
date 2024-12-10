@@ -1,7 +1,7 @@
 import { clientMongo } from "../db/connectDB.js";
 import createUserDB from "../db/createUserDB.js";
 import readUserDB from "../db/readUserDB.js";
-import hashBCRypt from "./hashingController.js";
+import { hashPassword } from "./hashingController.js";
 
 export default async function handleSignup(req, res) {
   try {
@@ -21,7 +21,7 @@ export default async function handleSignup(req, res) {
     }
 
     // Hash the password before storing it
-    const hashedPassword = await hashBCRypt(password);
+    const hashedPassword = await hashPassword(password);
     console.log(hashedPassword);
 
     // Create a new user

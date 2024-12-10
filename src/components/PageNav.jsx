@@ -17,7 +17,7 @@ export default function PageNav() {
         </li>
         <li>
           <NavLink to="/login" className={styles.ctaLink}>
-            Login
+            Login / Sign Up
           </NavLink>
         </li>
       </ul>

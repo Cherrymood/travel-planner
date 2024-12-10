@@ -1,18 +1,16 @@
 import { useState } from "react";
 import axios from "axios";
-import PageNav from "../components/PageNav";
+import PageNav from "../components/PageNav.jsx";
 import styles from "./Login.module.css";
 import Button from "../components/Button.jsx";
-import GoogleBtn from "../components/GoogleBtn.jsx";
-import { Link } from "react-router-dom";
-import ButtonSignUp from "../components/ButtonSignUp.jsx";
 
-export default function Login() {
+export default function SignUp() {
   const [email, setEmail] = useState("jack@example.com");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("qwerty");
   const [message, setMessage] = useState("");
 
-  async function handleLogin(e) {
+  async function handleSignUp(e) {
     e.preventDefault();
 
     try {
@@ -33,7 +31,17 @@ export default function Login() {
   return (
     <main className={styles.login}>
       <PageNav />
-      <form className={styles.form} onSubmit={handleLogin}>
+      <form className={styles.form} onSubmit={handleSignUp}>
+        <div className={styles.row}>
+          <label htmlFor="name">Name</label>
+          <input
+            type="name"
+            id="name"
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+          />
+        </div>
+
         <div className={styles.row}>
           <label htmlFor="email">Email address</label>
           <input
@@ -55,16 +63,7 @@ export default function Login() {
         </div>
 
         <div className={styles.buttons}>
-          <Button type="primary" htmlType="submit">
-            Login
-          </Button>
-
-          <Link to="/signup" className="cta">
-            Sign Up
-          </Link>
-        </div>
-        <div className={styles.row}>
-          <GoogleBtn>Sign In with Google</GoogleBtn>
+          <Button type="primary">Sign up</Button>
         </div>
         {message && <p>{message}</p>}
       </form>

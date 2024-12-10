@@ -1,17 +1,13 @@
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
-// import env from "dotenv";
 import cookieParser from "cookie-parser";
 
-// import createMongoBDClient from "./server/db/connectDB.js";
 import citiesRouter from "./server/routes/citiesRoutes.js";
 import loginRoutes from "./server/routes/loginRoutes.js";
 
 const app = express();
 const port = 3000;
-// env.config();
-// const bdClient = createMongoBDClient(process.env.URL_MD);
 
 // Middleware
 app.use(

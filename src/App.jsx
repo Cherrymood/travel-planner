@@ -11,6 +11,7 @@ import CityList from "./components/CityList";
 import CountriesList from "./components/CountriesList";
 import City from "./components/City";
 import Form from "./components/Form";
+import SignUp from "./pages/SignUp";
 
 const BASE_URL = `http://localhost:3000`;
 
@@ -41,6 +42,7 @@ export default function App() {
         <Route path="product" element={<Product />} />
         <Route path="pricing" element={<Pricing />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="app" element={<AppLayout />}>
           <Route index element={<Navigate replace to="cities" />} />
           <Route

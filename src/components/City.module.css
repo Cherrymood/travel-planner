@@ -45,3 +45,9 @@
   font-size: 1.6rem;
   color: var(--color-brand--1);
 }
+
+.backBtn {
+  font-weight: 600;
+  background: none;
+  border: 1px solid currentColor;
+}

@@ -4,7 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import citiesRouter from "./server/routes/citiesRoutes.js";
-import loginRoutes from "./server/routes/loginRoutes.js";
+import loginRoutes from "./server/routes/authenticationRoutes.js";
 import signupRoutes from "./server/routes/signupRoutes.js";
 
 const app = express();

@@ -7,7 +7,7 @@ async function hashPassword(password, saltRounds = 10) {
     return hash;
   } catch (error) {
     console.error("Error hashing password:", error);
-    throw error; // Re-throw the error so it can be handled by the caller
+    throw error;
   }
 }
 
@@ -19,7 +19,7 @@ async function compareHashedPassword(password, hash) {
     return result;
   } catch (error) {
     console.error("Error hashing password:", error);
-    throw error; // Re-throw the error so it can be handled by the caller
+    throw error;
   }
 }
 export { hashPassword, compareHashedPassword };

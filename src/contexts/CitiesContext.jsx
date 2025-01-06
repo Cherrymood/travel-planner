@@ -8,7 +8,7 @@ const BASE_URL = `http://localhost:3000`;
 function CitiesProvider({ children }) {
   const [cities, setCities] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentCity, setCurrentCity] = useState(null);
+  const [currentCity, setCurrentCity] = useState({});
 
   useEffect(function () {
     async function fetchCities() {
@@ -17,12 +17,9 @@ function CitiesProvider({ children }) {
 
         const res = await fetch(`${BASE_URL}/cities`);
         const data = await res.json();
-
         console.log(data);
 
         setCities(data);
-
-        console.log(cities);
       } catch {
         alert("There was an error loading data...");
       } finally {
@@ -30,6 +27,7 @@ function CitiesProvider({ children }) {
       }
     }
     fetchCities();
+    console.log(`Cities after fetch ${cities}`);
   }, []);
 
   async function getCity(id) {
@@ -37,6 +35,7 @@ function CitiesProvider({ children }) {
       setIsLoading(true);
       const res = await fetch(`${BASE_URL}/cities/${id}`);
       const data = await res.json();
+      console.log(data);
 
       setCurrentCity(data);
     } catch {
@@ -58,7 +57,7 @@ function CitiesProvider({ children }) {
       const data = await res.json();
       console.log(data);
 
-      setCurrentCity((cities) => [...cities, data]);
+      setCities((cities) => [...cities, newCity]);
     } catch {
       alert("There was an error loading data...");
     } finally {

@@ -55,13 +55,17 @@ async function getCity(req, res) {
 async function createCity(req, res) {
   try {
     const newCity = req.body;
+    console.log(newCity);
 
     // Validate newCity object
     if (!newCity || !newCity.cityName) {
       return res.status(400).json({ message: "City data is required" });
     }
     // Add the new city
-    const cityWithId = { ...newCity, id: Math.random() };
+    const cityWithId = {
+      ...newCity,
+      id: Math.floor(Math.random() * Math.pow(10, 8)),
+    };
     cities.push(cityWithId);
 
     // Write updated cities to file

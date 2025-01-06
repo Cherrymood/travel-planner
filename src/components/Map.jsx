@@ -43,15 +43,10 @@ export default function Map() {
 
   return (
     <div className={styles.mapContainer}>
-      {!geoLocationPosition && (
-        <Button type="position" onClick={getPosition}>
-          {isLoadingPosition ? "Loading...." : "Use your position"}
-        </Button>
-      )}
       <MapContainer
         center={mapPosition}
         zoom={6}
-        scrollWheelZoom={true}
+        scrollWheelZoom={false}
         className={styles.map}
       >
         <TileLayer

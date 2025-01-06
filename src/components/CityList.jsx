@@ -21,5 +21,4 @@ function CityList() {
     </ul>
   );
 }
-
 export default CityList;

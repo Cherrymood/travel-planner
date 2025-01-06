@@ -23,3 +23,4 @@ dist-ssr
 *.sw?
 *.json
 *.config.js
+.env

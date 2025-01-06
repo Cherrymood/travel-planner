@@ -9,8 +9,6 @@ export default function AppLayout() {
     <div className={styles.app}>
       <Sidebar />
       <Map />
-      <AppNav />
-      <h1>LayOut</h1>
     </div>
   );
 }

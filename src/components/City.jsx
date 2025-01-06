@@ -1,6 +1,12 @@
 
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styles from "./City.module.css";
+import { useCities } from "../contexts/CitiesContext";
+import { useEffect } from "react";
+import Button from "./Button";
+import Spinner from "./Spinner";
+import BackButton from "./BackButton";
+import { useSearchParams } from "react-router-dom";
 
 const formatDate = (date) =>
   new Intl.DateTimeFormat("en", {
@@ -11,6 +17,19 @@ const formatDate = (date) =>
   }).format(new Date(date));
 
 export default function City() {
+  const { id } = useParams();
+  const { currentCity, getCity, isLoading } = useCities();
+
+  useEffect(
+    function () {
+      getCity(id);
+    },
+    [id]
+  );
+  const { cityName, emoji, date, notes } = currentCity;
+
+  if (isLoading) return <Spinner />;
+
   // TEMP DATA
   const currentCity = {
     cityName: "Lisbon",
@@ -106,10 +125,12 @@ export default function City() {
       </div>
 
       <div>
-        <ButtonBack />
+
+        <BackButton />
       </div>
     </div>
   );
 }
 
 export default City;
+

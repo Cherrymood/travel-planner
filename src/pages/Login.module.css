@@ -24,3 +24,19 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form .signup {
+  text-align: center;
+}
+.row .signup a {
+  color: #3498db;
+  text-decoration: none;
+}
+.form .signup a:hover {
+  text-decoration: underline;
+}

@@ -1,29 +1,28 @@
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   MapContainer,
   TileLayer,
-  Popup,
   Marker,
+  Popup,
   useMap,
   useMapEvents,
 } from "react-leaflet";
-import { useNavigate } from "react-router-dom";
-import { useGeolocation } from "../hooks/useGeolocation";
+
+import styles from "./Map.module.css";
 import { useEffect, useState } from "react";
 import { useCities } from "../contexts/CitiesContext";
+import { useGeolocation } from "../hooks/useGeolocation";
 import { useUrlPosition } from "../hooks/useUrlPosition";
-import styles from "./Map.module.css";
 import Button from "./Button";
 
-export default function Map() {
+function Map() {
   const { cities } = useCities();
-
   const [mapPosition, setMapPosition] = useState([40, 0]);
   const {
     isLoading: isLoadingPosition,
-    position: geoLocationPosition,
+    position: geolocationPosition,
     getPosition,
   } = useGeolocation();
-
   const [mapLat, mapLng] = useUrlPosition();
 
   useEffect(
@@ -35,18 +34,24 @@ export default function Map() {
 
   useEffect(
     function () {
-      if (geoLocationPosition)
-        setMapPosition([geoLocationPosition.lat, geoLocationPosition.lng]);
+      if (geolocationPosition)
+        setMapPosition([geolocationPosition.lat, geolocationPosition.lng]);
     },
-    [geoLocationPosition]
+    [geolocationPosition]
   );
 
   return (
     <div className={styles.mapContainer}>
+      {!geolocationPosition && (
+        <Button type="position" onClick={getPosition}>
+          {isLoadingPosition ? "Loading..." : "Use your position"}
+        </Button>
+      )}
+
       <MapContainer
         center={mapPosition}
         zoom={6}
-        scrollWheelZoom={false}
+        scrollWheelZoom={true}
         className={styles.map}
       >
         <TileLayer
@@ -59,13 +64,11 @@ export default function Map() {
             key={city.id}
           >
             <Popup>
-              {city.cityName}, {city.country}
-              {city.emoji}
-              <br />
-              {city.notes}
+              <span>{city.emoji}</span> <span>{city.cityName}</span>
             </Popup>
           </Marker>
         ))}
+
         <ChangeCenter position={mapPosition} />
         <DetectClick />
       </MapContainer>
@@ -86,3 +89,5 @@ function DetectClick() {
     click: (e) => navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`),
   });
 }
+
+export default Map;

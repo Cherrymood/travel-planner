@@ -1,3 +1,4 @@
+
 import fs from "fs/promises";
 import path from "path";
 
@@ -30,6 +31,7 @@ async function getCities(req, res) {
     const data = await readData();
     const cities = data.cities || [];
     res.json(cities);
+
   } catch (error) {
     console.error("Error fetching cities:", error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -45,6 +47,7 @@ async function getCity(req, res) {
 
     const data = await readData();
     const city = data.cities?.find((c) => c.id === cityId);
+
 
     if (!city) {
       return res.status(404).json({ message: "City not found" });

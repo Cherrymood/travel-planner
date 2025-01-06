@@ -6,6 +6,7 @@ import {
   deleteCity,
 } from "../controllers/getCities.js";
 
+
 const citiesRouter = express.Router();
 
 citiesRouter.get("/", getCities);

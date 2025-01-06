@@ -120,6 +120,7 @@ function CitiesProvider({ children }) {
   }
 
   return (
+
     <CitiesContext.Provider
       value={{
         cities,
@@ -131,6 +132,7 @@ function CitiesProvider({ children }) {
         deleteCity,
       }}
     >
+
       {children}
     </CitiesContext.Provider>
   );

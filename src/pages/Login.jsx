@@ -66,6 +66,7 @@ export default function Login() {
           <GoogleBtn>Sign In with Google</GoogleBtn>
         </div>
         {message && <p>{message}</p>}
+
       </form>
     </main>
   );

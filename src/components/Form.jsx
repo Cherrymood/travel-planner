@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useUrlPosition } from "../hooks/useUrlPosition";
 import DatePicker from "react-datepicker";
@@ -10,6 +11,7 @@ import Spinner from "./Spinner";
 import styles from "./Form.module.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { useCities } from "../contexts/CitiesContext";
+
 import { useNavigate } from "react-router-dom";
 
 export function convertToEmoji(countryCode) {
@@ -20,6 +22,7 @@ export function convertToEmoji(countryCode) {
   return String.fromCodePoint(...codePoints);
 }
 
+
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
 function Form() {
@@ -27,10 +30,12 @@ function Form() {
 
   const [isLoadingGeoCoding, setisLoadingGeoCoding] = useState(false);
   const { createCity, isLoading } = useCities();
+
   const [cityName, setCityName] = useState("");
   const [country, setCountry] = useState("");
   const [date, setDate] = useState(new Date());
   const [notes, setNotes] = useState("");
+
   const [emoji, setEmoji] = useState("");
   const [geolocationError, setGeolocationError] = useState("");
   const navigate = useNavigate();
@@ -126,7 +131,9 @@ function Form() {
 
       <div className={styles.buttons}>
         <Button type="primary">Add</Button>
+
         <BackButton />
+
       </div>
     </form>
   );

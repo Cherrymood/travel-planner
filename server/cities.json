@@ -1,88 +1,16 @@
 {
   "cities": [
     {
-      "cityName": "Lisbon",
-      "country": "Portugal",
-      "emoji": "🇵🇹",
-      "date": "2027-10-31T15:59:59.138Z",
-      "notes": "My favorite city so far!",
-      "position": {
-        "lat": 38.727881642324164,
-        "lng": -9.140900099907554
-      },
-      "id": 73930385
-    },
-    {
       "cityName": "Madrid",
       "country": "Spain",
       "emoji": "🇪🇸",
-      "date": "2027-07-15T08:22:53.976Z",
+      "date": "2025-01-06T19:59:13.387Z",
       "notes": "",
       "position": {
-        "lat": 40.46635901755316,
-        "lng": -3.7133789062500004
+        "lat": 40.36328834091583,
+        "lng": -3.6035156250000004
       },
-      "id": 17806751
-    },
-    {
-      "cityName": "Berlin",
-      "country": "Germany",
-      "emoji": "🇩🇪",
-      "date": "2027-02-12T09:24:11.863Z",
-      "notes": "Amazing 😃",
-      "position": {
-        "lat": 52.53586782505711,
-        "lng": 13.376933665713324
-      },
-      "id": 98443197
-    },
-    {
-      "cityName": "Nijar",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2023-04-03T07:47:59.202Z",
-      "notes": "",
-      "position": {
-        "lat": 36.967508314568164,
-        "lng": -2.13128394200588
-      },
-      "id": 98443198
-    },
-    {
-      "cityName": "Tremp",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2024-12-31T00:49:34.026Z",
-      "notes": "tgrt",
-      "position": {
-        "lat": 42.24478535602799,
-        "lng": 0.7910156250000001
-      },
-      "id": 79421244
-    },
-    {
-      "cityName": "Guigou",
-      "country": "Morocco",
-      "emoji": "🇲🇦",
-      "date": "2024-12-31T00:49:59.474Z",
-      "notes": "fbgdfbd",
-      "position": {
-        "lat": 33.486435450999885,
-        "lng": -4.702148437500001
-      },
-      "id": 69380581
-    },
-    {
-      "cityName": "Malagon",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2024-12-31T00:51:47.030Z",
-      "notes": "hjhj",
-      "position": {
-        "lat": 39.30029918615029,
-        "lng": -4.108886718750001
-      },
-      "id": 22484635
+      "id": 1736193559561
     }
   ]
 }

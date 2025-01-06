@@ -55,16 +55,30 @@ async function getCity(req, res) {
 async function createCity(req, res) {
   try {
     const newCity = req.body;
-    console.log(newCity);
+    console.log("Received new city data:", newCity);
 
     // Validate newCity object
     if (!newCity || !newCity.cityName) {
-      return res.status(400).json({ message: "City data is required" });
+      return res.status(400).json({ message: "City name is required" });
     }
-    // Add the new city
+
+    // Read existing cities from file
+    const data = fs.readFileSync(filePath, "utf-8");
+    const parsedData = JSON.parse(data);
+    const cities = parsedData.cities || [];
+
+    // Check for duplicate city names
+    const duplicateCity = cities.find(
+      (city) => city.cityName === newCity.cityName
+    );
+    if (duplicateCity) {
+      return res.status(409).json({ message: "City already exists" });
+    }
+
+    // Add the new city with a unique ID
     const cityWithId = {
       ...newCity,
-      id: Math.floor(Math.random() * Math.pow(10, 8)),
+      id: Date.now() + Math.floor(Math.random() * 1e4),
     };
     cities.push(cityWithId);
 
@@ -81,4 +95,44 @@ async function createCity(req, res) {
   }
 }
 
-export { getCities, getCity, createCity };
+async function deleteCity(req, res) {
+  try {
+    const cityId = parseInt(req.params.id, 10);
+
+    // Validate cityId
+    if (isNaN(cityId) || cityId <= 0) {
+      return res.status(400).json({ message: "Valid city id is required" });
+    }
+
+    // Read existing cities from file
+    const data = fs.readFileSync(filePath, "utf-8");
+    const parsedData = JSON.parse(data);
+    const cities = parsedData.cities || [];
+
+    // Check if the city exists
+    const cityIndex = cities.findIndex((city) => city.id === cityId);
+    if (cityIndex === -1) {
+      return res.status(404).json({ message: "City not found" });
+    }
+
+    // Remove the city from the array
+    const updatedCities = cities.filter((city) => city.id !== cityId);
+
+    // Write updated cities to file
+    fs.writeFileSync(
+      filePath,
+      JSON.stringify({ cities: updatedCities }, null, 2),
+      "utf-8"
+    );
+
+    // Send response
+    return res
+      .status(200)
+      .json({ message: "City deleted successfully", cityId });
+  } catch (error) {
+    console.error("Error deleting city:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+export { getCities, getCity, createCity, deleteCity };

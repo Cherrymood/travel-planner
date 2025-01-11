@@ -81,7 +81,6 @@ export default function App() {
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
-
   );
 }
 //matching url to ui pages works on client side, it will never be reloaded

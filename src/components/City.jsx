@@ -1,4 +1,3 @@
-
 import { useParams } from "react-router-dom";
 import styles from "./City.module.css";
 import { useCities } from "../contexts/CitiesContext";
@@ -7,6 +6,7 @@ import Button from "./Button";
 import Spinner from "./Spinner";
 import BackButton from "./BackButton";
 import { useSearchParams } from "react-router-dom";
+
 
 const formatDate = (date) =>
   new Intl.DateTimeFormat("en", {
@@ -92,6 +92,7 @@ export default function City() {
 // }
 
 // export default City;
+
   return (
     <div className={styles.city}>
       <div className={styles.row}>
@@ -131,6 +132,4 @@ export default function City() {
     </div>
   );
 }
-
-export default City;
 

@@ -1,28 +1,52 @@
 {
   "cities": [
     {
-      "cityName": "Cherkasy",
-      "country": "Ukraine",
-      "emoji": "🇺🇦",
-      "date": "2025-01-06T22:19:00.735Z",
+      "cityName": "Villarrabe",
+      "country": "Spain",
+      "emoji": "🇪🇸",
+      "date": "2025-01-08T05:02:45.267Z",
       "notes": "",
       "position": {
-        "lat": 49.26780455063753,
-        "lng": 31.552734375000004
+        "lat": 42.439674178149446,
+        "lng": -4.7900390625
       },
-      "id": 1736201949303
+      "id": 1736312568368
     },
     {
-      "cityName": "Odesa",
-      "country": "Ukraine",
-      "emoji": "🇺🇦",
-      "date": "2025-01-06T22:19:03.552Z",
+      "cityName": "La Guerche-sur-l'Aubois",
+      "country": "France",
+      "emoji": "🇫🇷",
+      "date": "2025-01-08T05:02:48.159Z",
       "notes": "",
       "position": {
-        "lat": 46.619261036171515,
-        "lng": 31.113281250000004
+        "lat": 46.93526088057719,
+        "lng": 2.96630859375
       },
-      "id": 1736201951105
+      "id": 1736312573296
+    },
+    {
+      "cityName": "St. Niklaus",
+      "country": "Switzerland",
+      "emoji": "🇨🇭",
+      "date": "2025-01-08T05:02:51.325Z",
+      "notes": "",
+      "position": {
+        "lat": 46.17983040759436,
+        "lng": 7.778320312500001
+      },
+      "id": 1736312581393
+    },
+    {
+      "cityName": "Huez",
+      "country": "France",
+      "emoji": "🇫🇷",
+      "date": "2025-01-08T05:05:06.581Z",
+      "notes": "",
+      "position": {
+        "lat": 45.089035564831036,
+        "lng": 6.064453125000001
+      },
+      "id": 1736312713223
     }
   ]
 }

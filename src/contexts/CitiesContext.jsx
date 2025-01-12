@@ -6,7 +6,7 @@ import {
   useCallback,
 } from "react";
 
-const BASE_URL = "http://localhost:9000";
+const BASE_URL = "http://localhost:3000";
 
 const CitiesContext = createContext();
 
@@ -162,8 +162,10 @@ function CitiesProvider({ children }) {
 
 function useCities() {
   const context = useContext(CitiesContext);
-  if (context === undefined)
+  if (context === undefined) {
+    console.error("useCities called outside CitiesProvider");
     throw new Error("CitiesContext was used outside the CitiesProvider");
+  }
   return context;
 }
 

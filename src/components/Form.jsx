@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useUrlPosition } from "../hooks/useUrlPosition";
 import DatePicker from "react-datepicker";
@@ -22,10 +21,9 @@ export function convertToEmoji(countryCode) {
   return String.fromCodePoint(...codePoints);
 }
 
-
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
-function Form() {
+export default function Form() {
   const [lat, lng] = useUrlPosition();
 
   const [isLoadingGeoCoding, setisLoadingGeoCoding] = useState(false);
@@ -133,10 +131,7 @@ function Form() {
         <Button type="primary">Add</Button>
 
         <BackButton />
-
       </div>
     </form>
   );
 }
-
-export default Form;

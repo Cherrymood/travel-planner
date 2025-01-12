@@ -1,6 +1,6 @@
 import { clientMongo } from "../db/connectDB.js";
 import readUserDB from "../db/readUserDB.js";
-import { compareHashedPassword } from "./hashingController.js";
+import { compareHashedPassword } from "./hashing.js";
 
 export default async function handleLogin(req, res) {
   try {

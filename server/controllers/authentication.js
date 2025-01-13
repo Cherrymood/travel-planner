@@ -1,29 +1,36 @@
-import { clientMongo } from "../db/connectDB.js";
-import readUserDB from "../db/readUserDB.js";
+import User from "../db/UserSchema.js"; // Import the Mongoose model
 import { compareHashedPassword } from "./hashing.js";
 
 export default async function handleLogin(req, res) {
   try {
-    const login = req.body.email;
-    const password = req.body.password;
+    const { email, password } = req.body;
+    console.log({ email, password });
 
-    await clientMongo.connect();
-
-    const { result } = await readUserDB(clientMongo, login);
-
-    if (!result) {
-      return res.status(404).send("User not found");
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).send("Email and password are required");
     }
 
-    if (compareHashedPassword(password, result.password)) {
-      return res.status(200).send(`Welcome, ${login}!`);
+    // Find the user in the database
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).send("Invalid email or password");
+    }
+
+    // Compare the hashed password
+    const isPasswordValid = await compareHashedPassword(
+      password,
+      user.password
+    );
+
+    if (isPasswordValid) {
+      return res.status(200).send(`Welcome, ${user.username || email}!`);
     }
 
     return res.status(401).send("Invalid password");
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).send("Internal server error");
-  } finally {
-    await clientMongo.close();
   }
 }

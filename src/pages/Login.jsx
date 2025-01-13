@@ -4,42 +4,77 @@ import PageNav from "../components/PageNav";
 import styles from "./Login.module.css";
 import Button from "../components/Button.jsx";
 import GoogleBtn from "../components/GoogleBtn.jsx";
-import { Link } from "react-router-dom";
 
-export default function Login() {
-  const [email, setEmail] = useState("jack@example.com");
-  const [password, setPassword] = useState("qwerty");
+export default function Authorization() {
+  const [isLoginMode, setIsLoginMode] = useState(true);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  async function handleLogin(e) {
+  const API_URL = "http://localhost:3000";
+
+  async function handleSubmit(e) {
     e.preventDefault();
+    if (!email || !password || (!isLoginMode && !username)) {
+      setMessage("All fields are required.");
+      return;
+    }
 
+    setLoading(true);
     try {
-      const response = await axios.post("http://localhost:3000/login", {
-        email,
-        password,
-      });
-      setMessage(response.data.message);
-    } catch (error) {
-      if (error.response) {
-        setMessage(error.response.data.message); // Server error message
-      } else {
-        setMessage("Network error. Please try again later.");
+      const endpoint = isLoginMode ? "/login" : "/signup";
+      const payload = isLoginMode
+        ? { email, password }
+        : { username, email, password };
+
+      const response = await axios.post(`${API_URL}${endpoint}`, payload);
+
+      setMessage(
+        response.data.message ||
+          `${isLoginMode ? "Login" : "Signup"} successful!`
+      );
+      if (isLoginMode) {
+        // Handle successful login actions here (e.g., save token, redirect, etc.)
       }
+    } catch (error) {
+      setMessage(
+        error.response?.data?.message ||
+          "Network error. Please try again later."
+      );
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <main className={styles.login}>
       <PageNav />
-      <form className={styles.form} onSubmit={handleLogin}>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        {!isLoginMode && (
+          <div className={styles.row}>
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              placeholder="Enter your username"
+              onChange={(e) => setUsername(e.target.value)}
+              value={username}
+              required={!isLoginMode}
+            />
+          </div>
+        )}
+
         <div className={styles.row}>
-          <label htmlFor="email">Email address</label>
+          <label htmlFor="email">Email</label>
           <input
             type="email"
             id="email"
+            placeholder="Enter your email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
+            required
           />
         </div>
 
@@ -48,25 +83,48 @@ export default function Login() {
           <input
             type="password"
             id="password"
+            placeholder="Enter your password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
+            required
           />
         </div>
 
         <div className={styles.buttons}>
-          <Button type="primary" htmlType="submit">
-            Login
+          <Button type="primary" disabled={loading}>
+            {loading
+              ? isLoginMode
+                ? "Logging in..."
+                : "Signing up..."
+              : isLoginMode
+              ? "Login"
+              : "Sign Up"}
           </Button>
-
-          <Link to="/signup" className="cta">
-            Sign Up
-          </Link>
+          <Button
+            type="primary"
+            onClick={(e) => {
+              e.preventDefault();
+              setIsLoginMode((prev) => !prev);
+              setMessage(""); // Clear any previous messages
+            }}
+          >
+            {isLoginMode ? "Switch to Sign Up" : "Switch to Login"}
+          </Button>
         </div>
+
         <div className={styles.row}>
           <GoogleBtn>Sign In with Google</GoogleBtn>
         </div>
-        {message && <p>{message}</p>}
 
+        {message && (
+          <p
+            className={
+              message.includes("successful") ? styles.success : styles.error
+            }
+          >
+            {message}
+          </p>
+        )}
       </form>
     </main>
   );

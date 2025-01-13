@@ -1,39 +1,48 @@
-// server/db/connect.js
-import { MongoClient, ServerApiVersion } from "mongodb";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const clientMongo = new MongoClient(process.env.URL_MD, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
+const mongooseOptions = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 30000, // Increase server selection timeout to 30 seconds
+  socketTimeoutMS: 30000, // Increase socket timeout to 30 seconds
+};
+
+let isConnected = false;
 
 async function connectMongo() {
-  try {
-    // Connect the client to the server
-    await clientMongo.connect();
-    // Send a ping to confirm a successful connection
-    await clientMongo.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
-  } catch (error) {
-    console.error("Failed to connect to MongoDB:", error);
-    throw error;
+  if (!isConnected) {
+    try {
+      await mongoose.connect(process.env.URL_MD, mongooseOptions);
+      console.log("Successfully connected to MongoDB using Mongoose!");
+      isConnected = true;
+    } catch (error) {
+      console.error("Failed to connect to MongoDB:", error);
+      throw error;
+    }
   }
+}
+
+async function getCollection(collectionName) {
+  if (!isConnected) {
+    await connectMongo();
+  }
+  const db = mongoose.connection.db;
+  return db.collection(collectionName); // MongoDB native collection interface
 }
 
 async function closeMongo() {
-  try {
-    await clientMongo.close();
-    console.log("MongoDB connection closed");
-  } catch (error) {
-    console.error("Failed to close MongoDB connection:", error);
+  if (isConnected) {
+    try {
+      await mongoose.disconnect();
+      isConnected = false;
+      console.log("Mongoose connection closed");
+    } catch (error) {
+      console.error("Failed to close Mongoose connection:", error);
+    }
   }
 }
 
-export { clientMongo, connectMongo, closeMongo };
+export { connectMongo, getCollection, closeMongo };

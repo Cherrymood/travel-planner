@@ -40,3 +40,23 @@
 .form .signup a:hover {
   text-decoration: underline;
 }
+
+.linkButton {
+  display: inline-block;
+  width: 100%;
+  padding: 10px 20px;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  font-weight: bold;
+  background: none;
+}
+
+.linkButton:hover {
+  text-decoration: none;
+}
+
+button:disabled .linkButton {
+  pointer-events: none;
+  opacity: 0.6;
+}

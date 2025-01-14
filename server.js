@@ -7,6 +7,7 @@ import citiesRouter from "./server/routes/citiesRoutes.js";
 import authRoutes from "./server/routes/authenticationRoutes.js";
 import notFoundMiddleware from "./server/middleware/not-found.js";
 import errorHandlerMiddleware from "./server/middleware/error-handler.js";
+import authUser from "./server/middleware/authentication.js";
 
 const app = express();
 const port = 3000;
@@ -35,8 +36,8 @@ app.use(cookieParser());
 })();
 
 // ROUTES
-app.use("/cities", citiesRouter);
 app.use("/auth", authRoutes);
+app.use("/cities", authUser, citiesRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

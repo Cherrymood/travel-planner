@@ -13,18 +13,20 @@ export default function Authorization() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const API_URL = "http://localhost:3000";
+  const API_URL = "http://localhost:3000/auth";
 
   async function handleSubmit(e) {
     e.preventDefault();
+
     if (!email || !password || (!isLoginMode && !username)) {
       setMessage("All fields are required.");
       return;
     }
 
     setLoading(true);
+
     try {
-      const endpoint = isLoginMode ? "/login" : "/signup";
+      const endpoint = isLoginMode ? "/login" : "/register";
       const payload = isLoginMode
         ? { email, password }
         : { username, email, password };

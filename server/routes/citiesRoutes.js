@@ -8,7 +8,7 @@ import {
 
 const citiesRouter = express.Router();
 
-citiesRouter.get("/", getCities).post("/", createCity);
-citiesRouter.get("/:id", getCity).delete("/:id", deleteCity);
+citiesRouter.route("/").get(getCities).post(createCity);
+citiesRouter.route("/:id").get(getCity).delete(deleteCity);
 
 export default citiesRouter;

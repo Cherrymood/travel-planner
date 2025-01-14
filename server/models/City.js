@@ -14,28 +14,28 @@ const CitySchema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    default: Date.now, 
+    default: Date.now,
   },
   emoji: {
     type: String,
-    maxlength: 5, 
+    maxlength: 5,
+  },
   notes: {
     type: String,
-    maxlength: 500, 
-    default: "", 
+    maxlength: 500,
+    default: "",
   },
   position: {
     lat: {
       type: Number,
-      required: true, 
+      required: true,
     },
     lng: {
       type: Number,
-      required: true, 
+      required: true,
     },
   },
 });
-
 
 const City = mongoose.model("City", CitySchema);
 

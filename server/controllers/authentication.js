@@ -1,36 +1,22 @@
-import User from "../db/UserSchema.js"; // Import the Mongoose model
-import { compareHashedPassword } from "./hashing.js";
+import User from "../models/User.js";
+import { StatusCodes } from "http-status-codes";
 
-export default async function handleLogin(req, res) {
+async function register(req, res) {
+  const user = await User.create({ ...req.body });
+  const token = user.createJWT();
+
+  res.status(StatusCodes.CREATED).json({ user: { name: user.name }, token });
+}
+
+async function login(req, res) {
   try {
-    const { email, password } = req.body;
-    console.log({ email, password });
+    const user = await User.checkExistUser(req.body);
+    const token = user.createJWT();
 
-    // Validate input
-    if (!email || !password) {
-      return res.status(400).send("Email and password are required");
-    }
-
-    // Find the user in the database
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(404).send("Invalid email or password");
-    }
-
-    // Compare the hashed password
-    const isPasswordValid = await compareHashedPassword(
-      password,
-      user.password
-    );
-
-    if (isPasswordValid) {
-      return res.status(200).send(`Welcome, ${user.username || email}!`);
-    }
-
-    return res.status(401).send("Invalid password");
+    res.status(StatusCodes.OK).json({ user: { name: user.name }, token });
   } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).send("Internal server error");
+    res.status(StatusCodes.UNAUTHORIZED).json({ error: error.message });
   }
 }
+
+export { register, login };

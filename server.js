@@ -3,10 +3,10 @@ import logger from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { connectMongo, closeMongo } from "./server/db/connectDB.js";
-
 import citiesRouter from "./server/routes/citiesRoutes.js";
-import loginRoutes from "./server/routes/authenticationRoutes.js";
-import signupRoutes from "./server/routes/signupRoutes.js";
+import authRoutes from "./server/routes/authenticationRoutes.js";
+import notFoundMiddleware from "./server/middleware/not-found.js";
+import errorHandlerMiddleware from "./server/middleware/error-handler.js";
 
 const app = express();
 const port = 3000;
@@ -36,8 +36,10 @@ app.use(cookieParser());
 
 // ROUTES
 app.use("/cities", citiesRouter);
-app.use("/login", loginRoutes);
-app.use("/signup", signupRoutes);
+app.use("/auth", authRoutes);
+
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
 // Start Server
 const server = app.listen(port, () => {

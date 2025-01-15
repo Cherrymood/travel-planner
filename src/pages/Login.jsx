@@ -4,6 +4,7 @@ import PageNav from "../components/PageNav";
 import styles from "./Login.module.css";
 import Button from "../components/Button.jsx";
 import GoogleBtn from "../components/GoogleBtn.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function Authorization() {
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -12,6 +13,8 @@ export default function Authorization() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const API_URL = "http://localhost:3000/auth";
 
@@ -31,22 +34,28 @@ export default function Authorization() {
         ? { email, password }
         : { username, email, password };
 
-      const response = await axios.post(`${API_URL}${endpoint}`, payload);
+      const response = await axios.post(`${API_URL}${endpoint}`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const { token } = response.data;
 
       setMessage(
         response.data.message ||
           `${isLoginMode ? "Login" : "Signup"} successful!`
       );
-      if (isLoginMode) {
-        // Handle successful login actions here (e.g., save token, redirect, etc.)
+
+      if (isLoginMode && token) {
+        localStorage.setItem("authToken", token);
+
+        console.log("Token saved:", token);
       }
+      navigate("/app/cities");
     } catch (error) {
-      setMessage(
-        error.response?.data?.message ||
-          "Network error. Please try again later."
-      );
-    } finally {
-      setLoading(false);
+      console.error("Error:", error.response?.data || error.message);
+      setMessage(error.response?.data?.message || "An error occurred.");
     }
   }
 

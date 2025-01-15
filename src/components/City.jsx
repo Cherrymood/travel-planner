@@ -5,16 +5,20 @@ import { useEffect } from "react";
 import Spinner from "./Spinner";
 import BackButton from "./BackButton";
 
-const formatDate = (date) =>
-  new Intl.DateTimeFormat("en", {
+const formatDate = (date) => {
+  const validDate = new Date(date);
+  if (isNaN(validDate)) return "Unknown Date";
+
+  return new Intl.DateTimeFormat("en", {
     day: "numeric",
     month: "long",
     year: "numeric",
     weekday: "long",
-  }).format(new Date(date));
+  }).format(validDate);
+};
 
 export default function City() {
-  const { id } = useParams();
+  const { _id } = useParams();
   const { currentCity, getCity, isLoading } = useCities();
   const [searchParams] = useSearchParams();
 
@@ -22,8 +26,8 @@ export default function City() {
   const lng = searchParams.get("lng") || "N/A";
 
   useEffect(() => {
-    if (id) getCity(id);
-  }, [id, getCity]);
+    if (_id) getCity(_id);
+  }, [_id, getCity]);
 
   if (isLoading) return <Spinner />;
 

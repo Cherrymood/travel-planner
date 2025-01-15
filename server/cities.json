@@ -1,52 +1,40 @@
 {
   "cities": [
     {
-      "cityName": "Villarrabe",
+      "cityName": "Penne-d'Agenais",
+      "country": "France",
+      "emoji": "🇫🇷",
+      "date": "2025-01-15T00:53:31.860Z",
+      "notes": "",
+      "position": {
+        "lat": 44.402391829093915,
+        "lng": 0.8789062500000001
+      },
+      "id": 1736902419630
+    },
+    {
+      "cityName": "Escarabajosa de Cabezas",
       "country": "Spain",
       "emoji": "🇪🇸",
-      "date": "2025-01-08T05:02:45.267Z",
+      "date": "2025-01-15T00:58:22.702Z",
       "notes": "",
       "position": {
-        "lat": 42.439674178149446,
-        "lng": -4.7900390625
+        "lat": 41.11246878918088,
+        "lng": -4.152832031250001
       },
-      "id": 1736312568368
+      "id": 1736902707167
     },
     {
-      "cityName": "La Guerche-sur-l'Aubois",
-      "country": "France",
-      "emoji": "🇫🇷",
-      "date": "2025-01-08T05:02:48.159Z",
+      "cityName": "Hernansancho",
+      "country": "Spain",
+      "emoji": "🇪🇸",
+      "date": "2025-01-15T00:59:01.450Z",
       "notes": "",
       "position": {
-        "lat": 46.93526088057719,
-        "lng": 2.96630859375
+        "lat": 40.863679665481676,
+        "lng": -4.724121093750001
       },
-      "id": 1736312573296
-    },
-    {
-      "cityName": "St. Niklaus",
-      "country": "Switzerland",
-      "emoji": "🇨🇭",
-      "date": "2025-01-08T05:02:51.325Z",
-      "notes": "",
-      "position": {
-        "lat": 46.17983040759436,
-        "lng": 7.778320312500001
-      },
-      "id": 1736312581393
-    },
-    {
-      "cityName": "Huez",
-      "country": "France",
-      "emoji": "🇫🇷",
-      "date": "2025-01-08T05:05:06.581Z",
-      "notes": "",
-      "position": {
-        "lat": 45.089035564831036,
-        "lng": 6.064453125000001
-      },
-      "id": 1736312713223
+      "id": 1736902746155
     }
   ]
 }

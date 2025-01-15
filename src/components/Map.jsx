@@ -17,6 +17,7 @@ import Button from "./Button";
 
 function Map() {
   const { cities } = useCities();
+  console.log(cities);
   const [mapPosition, setMapPosition] = useState([40, 0]);
   const {
     isLoading: isLoadingPosition,
@@ -58,10 +59,11 @@ function Map() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
         />
+
         {cities.map((city) => (
           <Marker
             position={[city.position.lat, city.position.lng]}
-            key={city.id}
+            key={city._id}
           >
             <Popup>
               <span>{city.emoji}</span> <span>{city.cityName}</span>

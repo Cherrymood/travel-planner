@@ -1,11 +1,17 @@
 import mongoose from "mongoose";
 
 const CitySchema = new mongoose.Schema({
+  createdBy: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
+    required: [true, "Please provide user"],
+  },
   cityName: {
     type: String,
     required: true,
     minlength: 3,
     maxlength: 25,
+    unique: true,
   },
   country: {
     type: String,

@@ -20,7 +20,10 @@ export default function Homepage() {
           essence of your travels, preserve memories, and inspire others to
           explore the world just like you have.
         </h2>
-        <Link to="/app" className="cta">
+        <Link
+          to={localStorage.getItem("authToken") ? "/app/cities" : "/login"}
+          className="cta"
+        >
           Start now
         </Link>
       </section>

@@ -44,7 +44,7 @@ function reducer(state, action) {
       return {
         ...state,
         isLoading: false,
-        cities: state.cities.filter((city) => city.id !== action.payload),
+        cities: state.cities.filter((city) => city._id !== action.payload),
         currentCity: {},
       };
 
@@ -60,6 +60,15 @@ function reducer(state, action) {
   }
 }
 
+function verifyToken() {
+  const token = localStorage.getItem("authToken");
+
+  return {
+    "Content-Type": "application/json",
+    Authorization: token ? `Bearer ${token}` : "",
+  };
+}
+
 function CitiesProvider({ children }) {
   const [{ cities, isLoading, currentCity, error }, dispatch] = useReducer(
     reducer,
@@ -70,10 +79,13 @@ function CitiesProvider({ children }) {
     async function fetchCities() {
       dispatch({ type: "loading" });
 
+      const headers = verifyToken();
+
       try {
-        const res = await fetch(`${BASE_URL}/cities`);
+        const res = await fetch(`${BASE_URL}/app/cities`, { headers });
         const data = await res.json();
-        dispatch({ type: "cities/loaded", payload: data });
+        console.log(data);
+        dispatch({ type: "cities/loaded", payload: data.cities });
       } catch {
         dispatch({
           type: "rejected",
@@ -90,14 +102,20 @@ function CitiesProvider({ children }) {
 
       dispatch({ type: "loading" });
 
+      const headers = verifyToken();
+
       try {
-        const res = await fetch(`${BASE_URL}/cities/${id}`);
+        const res = await fetch(`${BASE_URL}/app/cities/${id}`, { headers });
+        if (!res.ok) {
+          throw new Error("Failed to fetch city"); // Custom error message
+        }
+
         const data = await res.json();
         dispatch({ type: "city/loaded", payload: data });
-      } catch {
+      } catch (error) {
         dispatch({
           type: "rejected",
-          payload: "There was an error loading the city...",
+          payload: error.message || "There was an error loading the city...",
         });
       }
     },
@@ -107,17 +125,20 @@ function CitiesProvider({ children }) {
   async function createCity(newCity) {
     dispatch({ type: "loading" });
 
+    const headers = verifyToken();
+
     try {
-      const res = await fetch(`${BASE_URL}/cities`, {
+      const res = await fetch(`${BASE_URL}/app/cities`, {
         method: "POST",
-        body: JSON.stringify(newCity),
         headers: {
-          "Content-Type": "application/json",
+          ...headers,
         },
+        body: JSON.stringify(newCity),
       });
+
       const data = await res.json();
 
-      dispatch({ type: "city/created", payload: data });
+      dispatch({ type: "city/created", payload: data.city });
     } catch {
       dispatch({
         type: "rejected",
@@ -127,18 +148,28 @@ function CitiesProvider({ children }) {
   }
 
   async function deleteCity(id) {
+    if (Number(id) === currentCity.id) return;
+
     dispatch({ type: "loading" });
 
+    const headers = verifyToken();
+
     try {
-      await fetch(`${BASE_URL}/cities/${id}`, {
+      const deleteResponse = await fetch(`${BASE_URL}/app/cities/${id}`, {
         method: "DELETE",
+        headers,
       });
 
+      if (!deleteResponse.ok) {
+        throw new Error("Failed to delete city");
+      }
+
+      // Directly update the local state
       dispatch({ type: "city/deleted", payload: id });
-    } catch {
+    } catch (error) {
       dispatch({
         type: "rejected",
-        payload: "There was an error deleting the city...",
+        payload: error.message || "There was an error deleting the city...",
       });
     }
   }

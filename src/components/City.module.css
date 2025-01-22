@@ -1,10 +1,10 @@
+.city:link,
 .city {
   padding: 2rem 3rem;
   max-height: 70%;
   background-color: var(--color-dark--2);
   border-radius: 7px;
-  overflow: scroll;
-
+  overflow-y: auto; /* Allows vertical scrolling only */
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -50,4 +50,30 @@
   font-weight: 600;
   background: none;
   border: 1px solid currentColor;
+}
+
+.dateContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Moves the button to the right */
+  width: 100%; /* Ensure it takes up the full width */
+}
+
+.updateBtn {
+  height: 2.5rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--color-dark--1);
+  color: var(--color-light--2);
+  font-size: 1.6rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: 10px; /* Optional, to add space between the date and the button */
+}
+
+.updateBtn:hover {
+  background-color: var(--color-brand--1);
+  color: var(--color-dark--1);
 }

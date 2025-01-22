@@ -1,128 +1,84 @@
+import City from "../models/City.js";
+import { StatusCodes } from "http-status-codes";
+import { BadRequestError, NotFoundError } from "../errors/index.js";
 
-import fs from "fs/promises";
-import path from "path";
+const getCities = async (req, res) => {
+  const userId = req.user.userId;
 
-const filePath = path.resolve("server", "cities.json");
+  const cities = await City.find({ createdBy: userId }).sort("createdAt");
 
-// Utility: Read data from file
-async function readData() {
-  try {
-    const data = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    console.error("Error reading data from file:", error);
-    throw new Error("Failed to read data");
+  if (!cities) {
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ error: "Cities not found" });
   }
-}
 
-// Utility: Write data to file
-async function writeData(data) {
-  try {
-    await fs.writeFile(filePath, JSON.stringify(data, null, 2), "utf-8");
-  } catch (error) {
-    console.error("Error writing data to file:", error);
-    throw new Error("Failed to write data");
+  res.status(StatusCodes.OK).json({ cities, count: cities.length });
+};
+
+const getCity = async (req, res) => {
+  console.log("Req", req.params.id);
+
+  const {
+    user: { userId },
+    params: { id },
+  } = req;
+
+  const city = await City.findOne({
+    _id: id,
+    createdBy: userId,
+  });
+
+  if (!city) {
+    throw new NotFoundError(`No city with ID ${id}`);
   }
-}
 
-// Get all cities
-async function getCities(req, res) {
-  try {
-    const data = await readData();
-    const cities = data.cities || [];
-    res.json(cities);
+  res.status(StatusCodes.OK).json({ city });
+};
 
-  } catch (error) {
-    console.error("Error fetching cities:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+const createCity = async (req, res) => {
+  req.body.createdBy = req.user.userId;
+
+  const city = await City.create(req.body);
+
+  res.status(StatusCodes.CREATED).json({ city });
+};
+
+const updateCity = async (req, res) => {
+  const {
+    user: { userId },
+    params: { id },
+  } = req;
+
+  const { notes, date } = req.body;
+
+  if (!notes || !date) {
+    throw new BadRequestError("Notes or Date fields cannot be empty");
   }
-}
-// Get city by ID
-async function getCity(req, res) {
-  try {
-    const cityId = parseInt(req.params.id, 10);
-    if (isNaN(cityId)) {
-      return res.status(400).json({ message: "Invalid city ID" });
-    }
 
-    const data = await readData();
-    const city = data.cities?.find((c) => c.id === cityId);
+  const city = await City.findByIdAndUpdate(
+    {
+      _id: id,
+      createdBy: userId,
+    },
+    req.body,
+    { new: true, runValidators: true }
+  );
+};
 
+const deleteCity = async (req, res) => {
+  const {
+    user: { userId },
+    params: { id: cityId },
+  } = req;
 
-    if (!city) {
-      return res.status(404).json({ message: "City not found" });
-    }
+  const city = await City.findByIdAndDelete({ _id: cityId, createdBy: userId });
 
-    res.json(city);
-  } catch (error) {
-    console.error("Error fetching city:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+  if (!city) {
+    throw new NotFoundError(`No job with ${cityId}`);
   }
-}
 
-async function createCity(req, res) {
-  try {
-    const newCity = req.body;
-    if (!newCity || !newCity.cityName || !newCity.position) {
-      return res
-        .status(400)
-        .json({ message: "City name and position are required" });
-    }
+  res.status(StatusCodes.OK).json({ message: "City deleted successfully" });
+};
 
-    const { lat, lng } = newCity.position;
-    if (typeof lat !== "number" || typeof lng !== "number") {
-      return res.status(400).json({ message: "Invalid position coordinates" });
-    }
-
-    const data = await readData();
-    const cities = data.cities || [];
-
-    if (cities.some((city) => city.cityName === newCity.cityName)) {
-      return res.status(409).json({ message: "City already exists" });
-    }
-
-    const cityWithId = {
-      ...newCity,
-      id: Date.now() + Math.floor(Math.random() * 1e4),
-    };
-    cities.push(cityWithId);
-
-    await writeData({ cities });
-
-    res
-      .status(201)
-      .json({ message: "City created successfully", city: cityWithId });
-  } catch (error) {
-    console.error("Error creating city:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-}
-
-// Delete a city
-async function deleteCity(req, res) {
-  try {
-    const cityId = parseInt(req.params.id, 10);
-    if (isNaN(cityId) || cityId <= 0) {
-      return res.status(400).json({ message: "Valid city ID is required" });
-    }
-
-    const data = await readData();
-    const cities = data.cities || [];
-
-    const cityIndex = cities.findIndex((city) => city.id === cityId);
-    if (cityIndex === -1) {
-      return res.status(404).json({ message: "City not found" });
-    }
-
-    cities.splice(cityIndex, 1);
-
-    await writeData({ cities });
-
-    res.status(200).json({ message: "City deleted successfully", cityId });
-  } catch (error) {
-    console.error("Error deleting city:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-}
-
-export { getCities, getCity, createCity, deleteCity };
+export { getCities, getCity, createCity, deleteCity, updateCity };

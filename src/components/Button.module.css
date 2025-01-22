@@ -19,7 +19,10 @@
   color: var(--color-dark--1);
 }
 
-.back {
+.submit,
+.back,
+.submit,
+.button {
   font-weight: 600;
   background: none;
   border: 1px solid currentColor;

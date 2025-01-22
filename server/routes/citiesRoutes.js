@@ -4,14 +4,12 @@ import {
   getCity,
   createCity,
   deleteCity,
+  updateCity,
 } from "../controllers/getCities.js";
-
 
 const citiesRouter = express.Router();
 
-citiesRouter.get("/", getCities);
-citiesRouter.post("/", createCity);
-citiesRouter.get("/:id", getCity);
-citiesRouter.delete("/:id", deleteCity);
+citiesRouter.route("/").get(getCities).post(createCity);
+citiesRouter.route("/:id").get(getCity).delete(deleteCity).patch(updateCity);
 
 export default citiesRouter;

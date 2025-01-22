@@ -17,7 +17,7 @@ import Button from "./Button";
 
 function Map() {
   const { cities } = useCities();
-  console.log(cities);
+  // console.log(cities);
   const [mapPosition, setMapPosition] = useState([40, 0]);
   const {
     isLoading: isLoadingPosition,

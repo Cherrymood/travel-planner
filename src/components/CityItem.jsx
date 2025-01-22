@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-
 import { useCities } from "../contexts/CitiesContext";
 import styles from "./CityItem.module.css";
 
@@ -13,7 +12,6 @@ const formatDate = (date) =>
 function CityItem({ city }) {
   const { currentCity, deleteCity } = useCities();
   const { cityName, emoji, date, _id, position } = city;
-  console.log("City in cityItem", city);
 
   function handleClick(e) {
     e.preventDefault();

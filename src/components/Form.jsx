@@ -130,7 +130,7 @@ export default function Form() {
       <div className={styles.buttons}>
         <Button type="primary">Add</Button>
 
-        <BackButton />
+        <BackButton> &larr; Back </BackButton>
       </div>
     </form>
   );

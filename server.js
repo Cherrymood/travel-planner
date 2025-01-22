@@ -4,6 +4,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import env from "dotenv";
+import xss from "xss-clean";
+import { rateLimit } from "express-rate-limit";
 
 import citiesRouter from "./server/routes/citiesRoutes.js";
 import authUser from "./server/middleware/authentication.js";
@@ -20,6 +22,8 @@ const app = express();
 const port = 3000;
 
 // Middleware
+app.set("trust proxy", 1);
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(helmet()); //Sets Security Headers,Protects Against Certain Attacks
 app.use(
   cors({
@@ -27,6 +31,7 @@ app.use(
     credentials: true,
   })
 );
+app.use(xss());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

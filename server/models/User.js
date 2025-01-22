@@ -48,21 +48,17 @@ UserSchema.methods.comparePassword = async function (password) {
 
 UserSchema.statics.checkExistUser = async function (body) {
   const { email, password } = body;
-
   if (!email || !password) {
     throw new BadRequestError("Please provide email and password");
   }
-
   const user = await this.findOne({ email });
   if (!user) {
     throw new UnauthenticatedError("Invalid Credentials");
   }
-
   const isPasswordCorrect = await user.comparePassword(password);
   if (!isPasswordCorrect) {
     throw new UnauthenticatedError("Invalid Credentials");
   }
-
   return user;
 };
 

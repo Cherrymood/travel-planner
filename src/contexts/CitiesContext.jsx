@@ -28,6 +28,12 @@ function reducer(state, action) {
         isLoading: false,
         cities: action.payload,
       };
+    case "cities/update":
+      return {
+        ...state,
+        isLoading: false,
+        cities: action.payload,
+      };
 
     case "city/loaded":
       return { ...state, isLoading: false, currentCity: action.payload };
@@ -147,6 +153,31 @@ function CitiesProvider({ children }) {
     }
   }
 
+  async function updateCity(id, newData) {
+    dispatch({ type: "loading" });
+
+    const headers = verifyToken();
+
+    try {
+      const res = await fetch(`${BASE_URL}/app/cities/${id}`, {
+        method: "PATCH",
+        headers: {
+          ...headers,
+        },
+        body: JSON.stringify(newData),
+      });
+
+      const data = await res.json();
+
+      dispatch({ type: "city/update", payload: data.city });
+    } catch {
+      dispatch({
+        type: "rejected",
+        payload: "There was an error creating the city...",
+      });
+    }
+  }
+
   async function deleteCity(id) {
     if (Number(id) === currentCity.id) return;
 
@@ -184,6 +215,7 @@ function CitiesProvider({ children }) {
         getCity,
         createCity,
         deleteCity,
+        updateCity,
       }}
     >
       {children}

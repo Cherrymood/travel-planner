@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styles from "./City.module.css";
 import { useCities } from "../contexts/CitiesContext";
 import { useEffect } from "react";
@@ -7,7 +7,11 @@ import BackButton from "./BackButton";
 
 const formatDate = (date) => {
   const validDate = new Date(date);
-  if (isNaN(validDate)) return "Unknown Date";
+
+  // Check if the date is valid
+  if (isNaN(validDate)) {
+    return "Unknown Date"; // Fallback for invalid dates
+  }
 
   return new Intl.DateTimeFormat("en", {
     day: "numeric",
@@ -18,16 +22,12 @@ const formatDate = (date) => {
 };
 
 export default function City() {
-  const { _id } = useParams();
+  const { id } = useParams();
   const { currentCity, getCity, isLoading } = useCities();
-  const [searchParams] = useSearchParams();
-
-  const lat = searchParams.get("lat") || "N/A";
-  const lng = searchParams.get("lng") || "N/A";
 
   useEffect(() => {
-    if (_id) getCity(_id);
-  }, [_id, getCity]);
+    if (id) getCity(id);
+  }, [id, getCity]);
 
   if (isLoading) return <Spinner />;
 
@@ -40,7 +40,8 @@ export default function City() {
     );
   }
 
-  const { cityName, emoji, date, notes } = currentCity;
+  const { cityName, emoji, date, notes } = currentCity.city;
+  // console.log(currentCity.city);
 
   return (
     <div className={styles.city}>
@@ -62,13 +63,6 @@ export default function City() {
           <p>{notes}</p>
         </div>
       )}
-
-      <div className={styles.row}>
-        <h6>Coordinates</h6>
-        <p>
-          Latitude: {lat}, Longitude: {lng}
-        </p>
-      </div>
 
       <div className={styles.row}>
         <h6>Learn more</h6>

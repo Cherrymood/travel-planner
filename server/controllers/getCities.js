@@ -1,33 +1,36 @@
 import City from "../models/City.js";
-import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError } from "../errors/index.js";
 
 const getCities = async (req, res) => {
   const userId = req.user.userId;
 
-  const cities = await City.find({ createdBy: userId });
+  const cities = await City.find({ createdBy: userId }).sort("createdAt");
 
   if (!cities) {
-    return res.status(StatusCodes.NOT_FOUND).json({ error: "City not found" });
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ error: "Cities not found" });
   }
 
-  res.status(StatusCodes.OK).json({ cities });
+  res.status(StatusCodes.OK).json({ cities, count: cities.length });
 };
 
-const getCity = async (req, res, next) => {
-  const { id: cityId } = req.params;
+const getCity = async (req, res) => {
+  console.log("Req", req.params.id);
 
-  if (!mongoose.Types.ObjectId.isValid(cityId)) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: "Invalid city ID" });
-  }
+  const {
+    user: { userId },
+    params: { id },
+  } = req;
 
-  const city = await City.findById(cityId);
+  const city = await City.findOne({
+    _id: id,
+    createdBy: userId,
+  });
 
   if (!city) {
-    return res.status(StatusCodes.NOT_FOUND).json({ error: "City not found" });
+    throw new NotFoundError(`No city with ID ${id}`);
   }
 
   res.status(StatusCodes.OK).json({ city });
@@ -42,27 +45,40 @@ const createCity = async (req, res) => {
 };
 
 const updateCity = async (req, res) => {
-  console.log("updateJob");
+  const {
+    user: { userId },
+    params: { id },
+  } = req;
+
+  const { notes, date } = req.body;
+
+  if (!notes || !date) {
+    throw new BadRequestError("Notes or Date fields cannot be empty");
+  }
+
+  const city = await City.findByIdAndUpdate(
+    {
+      _id: id,
+      createdBy: userId,
+    },
+    req.body,
+    { new: true, runValidators: true }
+  );
 };
 
 const deleteCity = async (req, res) => {
-  const { id: cityId } = req.params;
+  const {
+    user: { userId },
+    params: { id: cityId },
+  } = req;
 
-  if (!mongoose.Types.ObjectId.isValid(cityId)) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: "Invalid city ID" });
-  }
-
-  const city = await City.findById(cityId);
+  const city = await City.findByIdAndDelete({ _id: cityId, createdBy: userId });
 
   if (!city) {
-    return res.status(StatusCodes.NOT_FOUND).json({ error: "City not found" });
+    throw new NotFoundError(`No job with ${cityId}`);
   }
 
-  await city.deleteOne();
-
-  res.status(StatusCodes.OK).json({ city });
+  res.status(StatusCodes.OK).json({ message: "City deleted successfully" });
 };
 
 export { getCities, getCity, createCity, deleteCity, updateCity };

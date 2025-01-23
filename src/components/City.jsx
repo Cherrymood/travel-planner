@@ -48,10 +48,7 @@ export default function City() {
     setIsEditing(true);
   }
 
-  function handleSubmit(e) {
-    const newData = e.target.value;
-    // updateCity(id, newData);
-  }
+  function handleSubmit(e) {}
 
   function handleCancel() {
     console.log("Cancel");
@@ -60,15 +57,17 @@ export default function City() {
   return (
     <div className={styles.city}>
       {isEditing ? (
-        <form className={styles1.form} onSubmit={handleSubmit}>
+        <form
+          className={`${styles1.form} ${isLoading ? styles.loading : ""}`}
+          onSubmit={handleSubmit}
+        >
           <div className={styles1.row}>
             <label htmlFor="date">When did you go to {cityName}?</label>
 
             <DatePicker
-              id="newDate"
-              value={newDate}
+              id="date"
               onChange={(date) => setNewDate(date)}
-              selected={date}
+              selected={newDate}
             />
           </div>
 
@@ -94,10 +93,7 @@ export default function City() {
             <h6>City name</h6>
             <h3>
               <span>{emoji}</span> {cityName}{" "}
-              <button
-                className={styles.updateBtn}
-                onClick={() => setIsEditing(true)}
-              >
+              <button className={styles.updateBtn} onClick={handleClick}>
                 &#128396;
               </button>
             </h3>
@@ -105,15 +101,13 @@ export default function City() {
 
           <div className={styles.row}>
             <h6>You went to {cityName} on</h6>
-            <p>{formatDate(date)}</p>
+            <p>{formatDate(newDate)}</p>
           </div>
 
-          {notes && (
-            <div className={styles.row}>
-              <h6>Your notes</h6>
-              <p>{notes}</p>
-            </div>
-          )}
+          <div className={styles.row}>
+            <h6>Your notes</h6>
+            <p>{newNotes}</p>
+          </div>
 
           <div className={styles.row}>
             <h6>Learn more</h6>

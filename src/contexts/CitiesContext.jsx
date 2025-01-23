@@ -85,6 +85,7 @@ function CitiesProvider({ children }) {
     reducer,
     initialState
   );
+  console.log("CurrentCity", currentCity);
 
   useEffect(function () {
     async function fetchCities() {
@@ -94,6 +95,7 @@ function CitiesProvider({ children }) {
 
       try {
         const res = await fetch(`${BASE_URL}/app/cities`, { headers });
+
         const data = await res.json();
 
         console.log("Context fetchCities", data.cities);
@@ -125,7 +127,8 @@ function CitiesProvider({ children }) {
         }
 
         const data = await res.json();
-        dispatch({ type: "city/loaded", payload: data });
+        console.log("Fetched cityId", data);
+        dispatch({ type: "city/loaded", payload: data.city });
       } catch (error) {
         dispatch({
           type: "rejected",

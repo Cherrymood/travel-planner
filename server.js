@@ -25,12 +25,7 @@ const port = 3000;
 app.set("trust proxy", 1);
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(helmet()); //Sets Security Headers,Protects Against Certain Attacks
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(xss());
 app.use(logger("dev"));
 app.use(express.json());

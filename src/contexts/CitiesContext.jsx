@@ -85,7 +85,7 @@ function CitiesProvider({ children }) {
     reducer,
     initialState
   );
-  console.log("CurrentCity", currentCity);
+  // console.log("CurrentCity", currentCity);
 
   useEffect(function () {
     async function fetchCities() {
@@ -98,7 +98,7 @@ function CitiesProvider({ children }) {
 
         const data = await res.json();
 
-        console.log("Context fetchCities", data.cities);
+        // console.log("Context fetchCities", data.cities);
 
         dispatch({ type: "cities/loaded", payload: data.cities });
       } catch {
@@ -127,7 +127,7 @@ function CitiesProvider({ children }) {
         }
 
         const data = await res.json();
-        console.log("Fetched cityId", data);
+        // console.log("Fetched cityId", data);
         dispatch({ type: "city/loaded", payload: data.city });
       } catch (error) {
         dispatch({
@@ -165,10 +165,12 @@ function CitiesProvider({ children }) {
   }
 
   async function updateCity(id, newData) {
+    console.log("Id and newData", newData);
+
     dispatch({ type: "loading" });
 
     const headers = verifyToken();
-    console.log("newData", newData);
+    // console.log("newData", newData);
 
     try {
       const res = await fetch(`${BASE_URL}/app/cities/${id}`, {
@@ -180,7 +182,7 @@ function CitiesProvider({ children }) {
       });
 
       const data = await res.json();
-      console.log("Returned data ", data);
+      // console.log("Returned data ", data);
 
       dispatch({ type: "city/update", payload: data.city });
     } catch {

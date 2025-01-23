@@ -1,9 +1,10 @@
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import styles from "./City.module.css";
 import { useCities } from "../contexts/CitiesContext";
 import { useEffect } from "react";
 import Spinner from "./Spinner";
 import BackButton from "./BackButton";
+import { useNavigate } from "react-router-dom";
 
 const formatDate = (date) => {
   const validDate = new Date(date);
@@ -23,7 +24,8 @@ const formatDate = (date) => {
 
 export default function City() {
   const { id } = useParams();
-  const { currentCity, getCity, isLoading } = useCities();
+  const { currentCity, getCity, isLoading, isEditing } = useCities();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) getCity(id);
@@ -40,10 +42,13 @@ export default function City() {
     );
   }
 
-  const { cityName, emoji, date, notes } = currentCity.city;
-  // console.log(currentCity.city);
+  // const { city } = currentCity;
+  // console.log(currentCity);
+  const { cityName, emoji, date, notes } = currentCity;
+  console.log("CurrentCity", currentCity);
 
   return (
+    // {isEditing ? navigate()}
     <div className={styles.city}>
       <div className={styles.row}>
         <h6>City name</h6>

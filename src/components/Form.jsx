@@ -81,7 +81,7 @@ export default function Form() {
       notes,
       position: { lat: +lat, lng: +lng },
     };
-    console.log(`New City from form:`, newCity);
+    // console.log(`New City from form:`, newCity);
     await createCity(newCity);
     navigate("/app/cities");
   }

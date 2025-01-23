@@ -15,12 +15,16 @@ const initialState = {
   isLoading: false,
   currentCity: {},
   error: "",
+  isEditing: false,
 };
 
 function reducer(state, action) {
   switch (action.type) {
     case "loading":
       return { ...state, isLoading: true };
+
+    case "editing":
+      return { ...state, isEditing: true };
 
     case "cities/loaded":
       return {
@@ -33,6 +37,7 @@ function reducer(state, action) {
         ...state,
         isLoading: false,
         cities: action.payload,
+        isEditing: false,
       };
 
     case "city/loaded":
@@ -90,7 +95,9 @@ function CitiesProvider({ children }) {
       try {
         const res = await fetch(`${BASE_URL}/app/cities`, { headers });
         const data = await res.json();
-        console.log(data);
+
+        console.log("Context fetchCities", data.cities);
+
         dispatch({ type: "cities/loaded", payload: data.cities });
       } catch {
         dispatch({
@@ -105,6 +112,7 @@ function CitiesProvider({ children }) {
   const getCity = useCallback(
     async function getCity(id) {
       if (Number(id) === currentCity.id) return;
+      console.log("Context", currentCity);
 
       dispatch({ type: "loading" });
 
@@ -129,7 +137,7 @@ function CitiesProvider({ children }) {
   );
 
   async function createCity(newCity) {
-    dispatch({ type: "loading" });
+    dispatch({ type: "editing" });
 
     const headers = verifyToken();
 
@@ -157,6 +165,7 @@ function CitiesProvider({ children }) {
     dispatch({ type: "loading" });
 
     const headers = verifyToken();
+    console.log("newData", newData);
 
     try {
       const res = await fetch(`${BASE_URL}/app/cities/${id}`, {
@@ -168,6 +177,7 @@ function CitiesProvider({ children }) {
       });
 
       const data = await res.json();
+      console.log("Returned data ", data);
 
       dispatch({ type: "city/update", payload: data.city });
     } catch {

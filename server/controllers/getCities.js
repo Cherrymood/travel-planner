@@ -56,7 +56,7 @@ const updateCity = async (req, res) => {
     throw new BadRequestError("Notes or Date fields cannot be empty");
   }
 
-  const city = await City.findByIdAndUpdate(
+  await City.findByIdAndUpdate(
     {
       _id: id,
       createdBy: userId,
@@ -64,6 +64,8 @@ const updateCity = async (req, res) => {
     req.body,
     { new: true, runValidators: true }
   );
+
+  res.status(StatusCodes.OK).json({ message: "City updated successfully" });
 };
 
 const deleteCity = async (req, res) => {

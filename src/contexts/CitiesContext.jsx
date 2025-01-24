@@ -32,13 +32,6 @@ function reducer(state, action) {
         isLoading: false,
         cities: action.payload,
       };
-    case "cities/update":
-      return {
-        ...state,
-        isLoading: false,
-        cities: action.payload,
-        isEditing: false,
-      };
 
     case "city/loaded":
       return { ...state, isLoading: false, currentCity: action.payload };
@@ -114,7 +107,7 @@ function CitiesProvider({ children }) {
   const getCity = useCallback(
     async function getCity(id) {
       if (Number(id) === currentCity.id) return;
-      console.log("Context", currentCity);
+      // console.log("GetCity", id);
 
       dispatch({ type: "loading" });
 
@@ -123,11 +116,11 @@ function CitiesProvider({ children }) {
       try {
         const res = await fetch(`${BASE_URL}/app/cities/${id}`, { headers });
         if (!res.ok) {
-          throw new Error("Failed to fetch city"); // Custom error message
+          throw new Error("Failed to fetch city");
         }
 
         const data = await res.json();
-        // console.log("Fetched cityId", data);
+
         dispatch({ type: "city/loaded", payload: data.city });
       } catch (error) {
         dispatch({
@@ -164,27 +157,31 @@ function CitiesProvider({ children }) {
     }
   }
 
-  async function updateCity(id, newData) {
-    console.log("Id and newData", newData);
-
+  async function updateCity(id, newDate, newNotes) {
     dispatch({ type: "loading" });
 
     const headers = verifyToken();
-    // console.log("newData", newData);
+
+    if (!id || (!newDate && !newNotes)) {
+      console.error("Invalid input: id, newDate, and newNotes are required.");
+      dispatch({
+        type: "rejected",
+        payload: "Invalid input data. Please provide all required fields.",
+      });
+      return;
+    }
 
     try {
-      const res = await fetch(`${BASE_URL}/app/cities/${id}`, {
+      await fetch(`${BASE_URL}/app/cities/${id}`, {
         method: "PATCH",
         headers: {
           ...headers,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(newData),
+        body: JSON.stringify({ notes: newNotes, date: newDate }),
       });
 
-      const data = await res.json();
-      // console.log("Returned data ", data);
-
-      dispatch({ type: "city/update", payload: data.city });
+      getCity(id);
     } catch {
       dispatch({
         type: "rejected",

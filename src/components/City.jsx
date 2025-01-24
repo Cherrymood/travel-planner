@@ -28,6 +28,9 @@ const formatDate = (date) => {
 export default function City() {
   const { id } = useParams();
   const { currentCity, getCity, isLoading, updateCity } = useCities();
+  console.log("CurrentCity", currentCity);
+
+  const { cityName, emoji, date, notes } = currentCity;
 
   useEffect(
     function () {
@@ -36,11 +39,13 @@ export default function City() {
     [id, getCity]
   );
 
-  const { cityName, emoji, date, notes } = currentCity;
   const [isEditing, setIsEditing] = useState(false);
   const [newDate, setNewDate] = useState(date);
   const [newNotes, setNewNotes] = useState(notes);
-  // console.log("CurrentCity.city", currentCity);
+  console.log("CurrentCity.city", currentCity);
+  // console.log("NewDate", newDate);
+  // console.log("NewNate", newNotes);
+  // console.log("isEditing", isEditing);
 
   if (isLoading) return <Spinner />;
 
@@ -49,43 +54,44 @@ export default function City() {
   }
 
   function handleSubmit(e) {
-    const newData = e.target.value;
-    // updateCity(id, newData);
-  }
-
-  function handleCancel() {
-    console.log("Cancel");
+    e.preventDefault();
+    // console.log(newDate, newNotes, id);
+    updateCity(id, newDate, newNotes);
+    setIsEditing(!isEditing);
   }
 
   return (
     <div className={styles.city}>
       {isEditing ? (
-        <form className={styles1.form} onSubmit={handleSubmit}>
+        <form
+          className={`${styles1.form} ${isLoading ? styles.loading : ""}`}
+          onSubmit={handleSubmit}
+        >
           <div className={styles1.row}>
-            <label htmlFor="date">When did you go to {cityName}?</label>
+            <label htmlFor="newDate">When did you go to {cityName}?</label>
 
             <DatePicker
               id="newDate"
-              value={newDate}
-              onChange={(date) => setNewDate(date)}
-              selected={date}
+              onChange={(newDate) => setNewDate(newDate)}
+              // onChange={(e) => console.log(e.target.value)}
+              selected={newDate}
             />
           </div>
 
           <div className={styles1.row}>
-            <label htmlFor="notes">Notes about your trip to {cityName}</label>
+            <label htmlFor="newNotes">
+              Notes about your trip to {cityName}
+            </label>
             <textarea
-              id="notes"
+              id="newNotes"
               onChange={(e) => setNewNotes(e.target.value)}
-              value={notes}
+              // onChange={(e) => console.log(e.target.value)}
+              value={newNotes}
             />
           </div>
 
           <div className={styles1.row}>
             <Button type="submit">Save</Button>
-            <Button type="button" onClick={handleCancel}>
-              Cancel
-            </Button>
           </div>
         </form>
       ) : (
@@ -94,10 +100,7 @@ export default function City() {
             <h6>City name</h6>
             <h3>
               <span>{emoji}</span> {cityName}{" "}
-              <button
-                className={styles.updateBtn}
-                onClick={() => setIsEditing(true)}
-              >
+              <button className={styles.updateBtn} onClick={handleClick}>
                 &#128396;
               </button>
             </h3>
@@ -108,12 +111,10 @@ export default function City() {
             <p>{formatDate(date)}</p>
           </div>
 
-          {notes && (
-            <div className={styles.row}>
-              <h6>Your notes</h6>
-              <p>{notes}</p>
-            </div>
-          )}
+          <div className={styles.row}>
+            <h6>Your notes</h6>
+            <p>{notes}</p>
+          </div>
 
           <div className={styles.row}>
             <h6>Learn more</h6>

@@ -28,6 +28,9 @@ const formatDate = (date) => {
 export default function City() {
   const { id } = useParams();
   const { currentCity, getCity, isLoading, updateCity } = useCities();
+  console.log("CurrentCity", currentCity);
+
+  const { cityName, emoji, date, notes } = currentCity;
 
   useEffect(
     function () {
@@ -36,24 +39,13 @@ export default function City() {
     [id, getCity]
   );
 
-  const { cityName, emoji, date, notes } = currentCity;
-
   const [isEditing, setIsEditing] = useState(false);
   const [newDate, setNewDate] = useState(date);
   const [newNotes, setNewNotes] = useState(notes);
-  const [isSaved, setSave] = useState(false);
-  // console.log("CurrentCity.city", currentCity);
-  console.log("NewDate", newDate);
-  console.log("NewNate", newNotes);
-  console.log("isSaved", isSaved);
-
-  // useEffect(
-  //   function () {
-  //     updateCity(id, newDate, newNotes);
-  //   },
-
-  //   [isSaved]
-  // );
+  console.log("CurrentCity.city", currentCity);
+  // console.log("NewDate", newDate);
+  // console.log("NewNate", newNotes);
+  // console.log("isEditing", isEditing);
 
   if (isLoading) return <Spinner />;
 
@@ -61,10 +53,11 @@ export default function City() {
     setIsEditing(true);
   }
 
-  function handleSubmit() {
-    // e.preventDefault();
-    // updateCity(id, newDate, newNotes);
-    // setSave(!isSaved);
+  function handleSubmit(e) {
+    e.preventDefault();
+    // console.log(newDate, newNotes, id);
+    updateCity(id, newDate, newNotes);
+    setIsEditing(!isEditing);
   }
 
   return (
@@ -115,12 +108,12 @@ export default function City() {
 
           <div className={styles.row}>
             <h6>You went to {cityName} on</h6>
-            <p>{formatDate(newDate)}</p>
+            <p>{formatDate(date)}</p>
           </div>
 
           <div className={styles.row}>
             <h6>Your notes</h6>
-            <p>{newNotes}</p>
+            <p>{notes}</p>
           </div>
 
           <div className={styles.row}>

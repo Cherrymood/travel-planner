@@ -37,10 +37,23 @@ export default function City() {
   );
 
   const { cityName, emoji, date, notes } = currentCity;
+
   const [isEditing, setIsEditing] = useState(false);
   const [newDate, setNewDate] = useState(date);
   const [newNotes, setNewNotes] = useState(notes);
+  const [isSaved, setSave] = useState(false);
   // console.log("CurrentCity.city", currentCity);
+  console.log("NewDate", newDate);
+  console.log("NewNate", newNotes);
+  console.log("isSaved", isSaved);
+
+  // useEffect(
+  //   function () {
+  //     updateCity(id, newDate, newNotes);
+  //   },
+
+  //   [isSaved]
+  // );
 
   if (isLoading) return <Spinner />;
 
@@ -48,10 +61,10 @@ export default function City() {
     setIsEditing(true);
   }
 
-  function handleSubmit(e) {}
-
-  function handleCancel() {
-    console.log("Cancel");
+  function handleSubmit() {
+    // e.preventDefault();
+    // updateCity(id, newDate, newNotes);
+    // setSave(!isSaved);
   }
 
   return (
@@ -62,29 +75,30 @@ export default function City() {
           onSubmit={handleSubmit}
         >
           <div className={styles1.row}>
-            <label htmlFor="date">When did you go to {cityName}?</label>
+            <label htmlFor="newDate">When did you go to {cityName}?</label>
 
             <DatePicker
-              id="date"
-              onChange={(date) => setNewDate(date)}
+              id="newDate"
+              onChange={(newDate) => setNewDate(newDate)}
+              // onChange={(e) => console.log(e.target.value)}
               selected={newDate}
             />
           </div>
 
           <div className={styles1.row}>
-            <label htmlFor="notes">Notes about your trip to {cityName}</label>
+            <label htmlFor="newNotes">
+              Notes about your trip to {cityName}
+            </label>
             <textarea
-              id="notes"
+              id="newNotes"
               onChange={(e) => setNewNotes(e.target.value)}
-              value={notes}
+              // onChange={(e) => console.log(e.target.value)}
+              value={newNotes}
             />
           </div>
 
           <div className={styles1.row}>
             <Button type="submit">Save</Button>
-            <Button type="button" onClick={handleCancel}>
-              Cancel
-            </Button>
           </div>
         </form>
       ) : (

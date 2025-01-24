@@ -164,8 +164,8 @@ function CitiesProvider({ children }) {
     }
   }
 
-  async function updateCity(id, newData) {
-    console.log("Id and newData", newData);
+  async function updateCity(id, newDate, newNotes) {
+    console.log("Id and newData", id, newDate, newNotes);
 
     dispatch({ type: "loading" });
 
@@ -178,7 +178,7 @@ function CitiesProvider({ children }) {
         headers: {
           ...headers,
         },
-        body: JSON.stringify(newData),
+        body: JSON.stringify({ notes: newNotes, date: newDate }),
       });
 
       const data = await res.json();

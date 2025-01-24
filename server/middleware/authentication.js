@@ -3,6 +3,7 @@ import { UnauthenticatedError } from "../errors/index.js";
 
 export default async function auth(req, res, next) {
   const authHeader = req.headers.authorization;
+
   if (!authHeader || !authHeader.startsWith("Bearer")) {
     throw new UnauthenticatedError("Authentication invalid");
   }

@@ -28,7 +28,7 @@ const formatDate = (date) => {
 export default function City() {
   const { id } = useParams();
   const { currentCity, getCity, isLoading, updateCity } = useCities();
-  console.log("CurrentCity", currentCity);
+  // console.log("CurrentCity", currentCity);
 
   const { cityName, emoji, date, notes } = currentCity;
 
@@ -42,7 +42,8 @@ export default function City() {
   const [isEditing, setIsEditing] = useState(false);
   const [newDate, setNewDate] = useState(date);
   const [newNotes, setNewNotes] = useState(notes);
-  console.log("CurrentCity.city", currentCity);
+  // console.log("CurrentCity.city", currentCity);
+
   // console.log("NewDate", newDate);
   // console.log("NewNate", newNotes);
   // console.log("isEditing", isEditing);

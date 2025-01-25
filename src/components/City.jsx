@@ -43,6 +43,7 @@ export default function City() {
   const [newDate, setNewDate] = useState(date);
   const [newNotes, setNewNotes] = useState(notes);
   // console.log("CurrentCity.city", currentCity);
+
   // console.log("NewDate", newDate);
   // console.log("NewNate", newNotes);
   // console.log("isEditing", isEditing);

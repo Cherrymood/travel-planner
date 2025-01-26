@@ -80,69 +80,69 @@ export default function Authorization() {
   return (
     <main className={styles.login}>
       <PageNav />
-      <form className={styles.form} onSubmit={handleSubmit}>
-        {!isLoginMode && (
+      <div className={styles.form}>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          {!isLoginMode && (
+            <div className={styles.row}>
+              <label htmlFor="username">Username</label>
+              <input
+                type="text"
+                id="username"
+                placeholder="Enter your username"
+                onChange={(e) => setUsername(e.target.value)}
+                value={username}
+                required={!isLoginMode}
+              />
+            </div>
+          )}
+
           <div className={styles.row}>
-            <label htmlFor="username">Username</label>
+            <label htmlFor="email">Email</label>
             <input
-              type="text"
-              id="username"
-              placeholder="Enter your username"
-              onChange={(e) => setUsername(e.target.value)}
-              value={username}
-              required={!isLoginMode}
+              type="email"
+              id="email"
+              placeholder="Enter your email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              required
             />
           </div>
-        )}
 
-        <div className={styles.row}>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="Enter your email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            required
-          />
-        </div>
+          <div className={styles.row}>
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              required
+            />
+          </div>
 
-        <div className={styles.row}>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Enter your password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            required
-          />
-        </div>
-
-        <div className={styles.buttons}>
-          <Button type="primary" disabled={loading}>
-            {loading
-              ? isLoginMode
-                ? "Logging in..."
-                : "Signing up..."
-              : isLoginMode
-              ? "Login"
-              : "Sign Up"}
-          </Button>
-          <Button
-            type="primary"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsLoginMode((prev) => !prev);
-            }}
-          >
-            {isLoginMode ? "Switch to Sign Up" : "Switch to Login"}
-          </Button>
-        </div>
-        <GoogleBtn onClick={handleGoogle}>
-          {loading ? "Signing in with Google..." : "Sign In with Google"}
-        </GoogleBtn>
-      </form>
+          <div className={styles.buttons}>
+            <Button type="primary" disabled={loading}>
+              {loading
+                ? isLoginMode
+                  ? "Logging in..."
+                  : "Signing up..."
+                : isLoginMode
+                ? "Login"
+                : "Sign Up"}
+            </Button>
+            <Button
+              type="primary"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsLoginMode((prev) => !prev);
+              }}
+            >
+              {isLoginMode ? "Switch to Sign Up" : "Switch to Login"}
+            </Button>
+          </div>
+        </form>
+        <GoogleBtn onClick={handleGoogle}>Sign In with Google</GoogleBtn>
+      </div>
     </main>
   );
 }

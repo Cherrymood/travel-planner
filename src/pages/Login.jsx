@@ -11,7 +11,6 @@ export default function Authorization() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -22,7 +21,6 @@ export default function Authorization() {
     e.preventDefault();
 
     if (!email || !password || (!isLoginMode && !username)) {
-      setMessage("All fields are required.");
       return;
     }
 
@@ -42,11 +40,6 @@ export default function Authorization() {
 
       const { token } = response.data;
 
-      setMessage(
-        response.data.message ||
-          `${isLoginMode ? "Login" : "Signup"} successful!`
-      );
-
       if (isLoginMode && token) {
         localStorage.setItem("authToken", token);
 
@@ -55,7 +48,32 @@ export default function Authorization() {
       navigate("/app/cities");
     } catch (error) {
       console.error("Error:", error.response?.data || error.message);
-      setMessage(error.response?.data?.message || "An error occurred.");
+    }
+  }
+
+  async function handleGoogle(e) {
+    e.preventDefault();
+    console.log("Google");
+    setLoading(true);
+
+    try {
+      // const payload = { googleId: id, email, username: name };
+
+      const response = await axios.post(
+        `${API_URL}/google`, // Corrected URL
+        {}, // Body (empty in this case)
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log(response.data); // Log the response data
+    } catch (error) {
+      console.error("Google sign-in error:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -116,26 +134,14 @@ export default function Authorization() {
             onClick={(e) => {
               e.preventDefault();
               setIsLoginMode((prev) => !prev);
-              setMessage(""); // Clear any previous messages
             }}
           >
             {isLoginMode ? "Switch to Sign Up" : "Switch to Login"}
           </Button>
         </div>
-
-        <div className={styles.row}>
-          <GoogleBtn>Sign In with Google</GoogleBtn>
-        </div>
-
-        {message && (
-          <p
-            className={
-              message.includes("successful") ? styles.success : styles.error
-            }
-          >
-            {message}
-          </p>
-        )}
+        <GoogleBtn onClick={handleGoogle}>
+          {loading ? "Signing in with Google..." : "Sign In with Google"}
+        </GoogleBtn>
       </form>
     </main>
   );

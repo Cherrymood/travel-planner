@@ -6,6 +6,8 @@ import helmet from "helmet";
 import env from "dotenv";
 import xss from "xss-clean";
 import { rateLimit } from "express-rate-limit";
+import session from "express-session";
+import passport from "passport";
 
 import citiesRouter from "./server/routes/citiesRoutes.js";
 import authUser from "./server/middleware/authentication.js";
@@ -31,11 +33,21 @@ app.use(
     credentials: true,
   })
 );
+app.use(
+  session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.use(xss());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use(passport.initialize()); // init passport on every route call
+app.use(passport.session()); //allow passport to use "express-session"
 
 // ROUTES
 app.use("/auth", authRoutes);

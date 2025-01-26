@@ -1,5 +1,8 @@
 import User from "../models/User.js";
 import { StatusCodes } from "http-status-codes";
+import env from "dotenv";
+
+env.config();
 
 async function register(req, res) {
   const user = await User.create({ ...req.body });

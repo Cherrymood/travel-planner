@@ -16,11 +16,22 @@ export default function PageNav() {
           <NavLink to="/product">Product</NavLink>
         </li>
         <li>
-          <NavLink to="/login" className={styles.ctaLink}>
-
-            Login / Sign Up
-
-          </NavLink>
+          {!localStorage.getItem("authToken") ? (
+            <NavLink to="/login" className={styles.ctaLink}>
+              Sign Up
+            </NavLink>
+          ) : (
+            <NavLink
+              to="/"
+              className={styles.ctaLink}
+              onClick={() => {
+                localStorage.removeItem("authToken");
+                window.location.reload(); // Optional: Refresh the page to reflect changes
+              }}
+            >
+              Sign Out
+            </NavLink>
+          )}
         </li>
       </ul>
     </nav>

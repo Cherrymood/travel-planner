@@ -21,8 +21,11 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "Please provide password"],
     minlength: 6,
+    select: false,
+  },
+  googleId: {
+    type: String,
   },
 });
 

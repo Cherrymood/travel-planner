@@ -3,7 +3,7 @@ import Button from "./Button";
 
 export default function GoogleBtn({ children, onClick, type }) {
   return (
-    <Button>
+    <Button onClick={onClick}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"

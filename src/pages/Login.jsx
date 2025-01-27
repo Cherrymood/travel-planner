@@ -43,7 +43,7 @@ export default function Authorization() {
       if (isLoginMode && token) {
         localStorage.setItem("authToken", token);
 
-        console.log("Token saved:", token);
+        // console.log("Token saved:", token);
       }
       navigate("/app/cities");
     } catch (error) {
@@ -51,31 +51,32 @@ export default function Authorization() {
     }
   }
 
-  async function handleGoogle(e) {
-    e.preventDefault();
-    console.log("Google");
+  const handleGoogle = async (response) => {
     setLoading(true);
 
     try {
-      // const payload = { googleId: id, email, username: name };
+      const res = await fetch(`${API_URL}/google`, {
+        method: "GET",
+        credentials: "include",
+      });
 
-      const response = await axios.post(
-        `${API_URL}/google`, // Corrected URL
-        {}, // Body (empty in this case)
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log(response.data); // Log the response data
-    } catch (error) {
-      console.error("Google sign-in error:", error);
-    } finally {
+      const data = await res.json();
       setLoading(false);
+
+      if (res.ok) {
+        if (data?.user && data?.token) {
+          localStorage.setItem("token", data.token);
+        }
+      } else {
+        throw new Error(data?.message || "Authentication failed");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error during Google authentication:", error.message);
+      // Display error to the user
+      alert("Google authentication failed: " + error.message);
     }
-  }
+  };
 
   return (
     <main className={styles.login}>
@@ -140,8 +141,8 @@ export default function Authorization() {
               {isLoginMode ? "Switch to Sign Up" : "Switch to Login"}
             </Button>
           </div>
+          <GoogleBtn onClick={handleGoogle}>Sign In with Google</GoogleBtn>
         </form>
-        <GoogleBtn onClick={handleGoogle}>Sign In with Google</GoogleBtn>
       </div>
     </main>
   );

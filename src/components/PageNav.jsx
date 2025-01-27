@@ -16,11 +16,7 @@ export default function PageNav() {
           <NavLink to="/product">Product</NavLink>
         </li>
         <li>
-          {!localStorage.getItem("authToken") ? (
-            <NavLink to="/login" className={styles.ctaLink}>
-              Sign Up
-            </NavLink>
-          ) : (
+          {localStorage.getItem("authToken") && (
             <NavLink
               to="/"
               className={styles.ctaLink}

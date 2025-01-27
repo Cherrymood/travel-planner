@@ -1,22 +1,29 @@
 import passport from "passport";
-import GoogleStrategy from "passport-google-oauth2";
-import User from "../models/User";
+import { Strategy as GoogleStrategy } from "passport-google-oauth2";
+import User from "../models/User.js";
+import env from "dotenv";
+
+env.config();
 
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/google",
+      callbackURL: process.env.CALLBACK_URL,
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {
+      console.log(profile);
       try {
         const user = await User.findOrCreate({
           googleId: profile.id,
-          username: profile.name,
+          username: profile.displayName,
+          token: accessToken,
         });
-        console.log(user);
+
+        console.log("User found or created:", user);
+
         return done(null, user);
       } catch (err) {
         console.error("Error during user findOrCreate:", err);
@@ -33,3 +40,5 @@ passport.serializeUser((user, cb) => {
 passport.deserializeUser((user, cb) => {
   cb(null, user);
 });
+
+export default passport;

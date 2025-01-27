@@ -1,5 +1,6 @@
 import styles from "./Button.module.css";
 import Button from "./Button";
+import React from "react";
 
 export default function GoogleBtn({ children, onClick, type }) {
   return (

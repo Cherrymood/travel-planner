@@ -1,4 +1,5 @@
 import styles from "./User.module.css";
+import React from "react";
 
 const FAKE_USER = {
   name: "Jack",

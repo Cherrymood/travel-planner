@@ -2,6 +2,7 @@ import styles from "./CountriesList.module.css";
 import Spinner from "./Spinner";
 import CountryItem from "./CountryItem";
 import Message from "./Message";
+import React from "react";
 import { useCities } from "../contexts/CitiesContext";
 
 export default function CountriesList() {

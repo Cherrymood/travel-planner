@@ -1,5 +1,6 @@
 import Spinner from "./Spinner";
 import styles from "./CityList.module.css";
+import React from "react";
 
 import CityItem from "./CityItem";
 import Message from "./Message";

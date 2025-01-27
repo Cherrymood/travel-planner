@@ -7,6 +7,7 @@ import {
   useMap,
   useMapEvents,
 } from "react-leaflet";
+import React from "react";
 
 import styles from "./Map.module.css";
 import { useEffect, useState } from "react";

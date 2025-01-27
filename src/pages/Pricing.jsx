@@ -1,5 +1,6 @@
 import PageNav from "../components/PageNav";
 import styles from "./Product.module.css";
+import React from "react";
 
 export default function Pricing() {
   return (

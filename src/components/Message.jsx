@@ -1,4 +1,5 @@
 import styles from "./Message.module.css";
+import React from "react";
 
 function Message({ message }) {
   return (

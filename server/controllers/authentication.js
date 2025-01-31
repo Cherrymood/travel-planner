@@ -1,14 +1,6 @@
 import User from "../models/User.js";
 import { StatusCodes } from "http-status-codes";
-
-// async function register(req, res) {
-//   const user = await User.create({ ...req.body });
-//   const token = user.createJWT();
-
-//   res
-//     .status(StatusCodes.CREATED)
-//     .json({ user: { name: user.username }, token });
-// }
+import { UnauthenticatedError } from "../errors/index.js";
 
 export default async function authentication(req, res) {
   try {
@@ -24,10 +16,17 @@ export default async function authentication(req, res) {
 
     let user = await User.checkExistUser(req.body);
 
-    if (!user) {
+    if (!user && !req.body.username) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        error: "Unauthorized: User is not authenticated.",
+      });
+    }
+
+    if (!user && req.body.username) {
       const { email, password, username } = req.body;
 
       user = await User.create({ email, password, username });
+
       return res
         .status(StatusCodes.CREATED)
         .json({ user: { name: user.username }, token: user.createJWT() });

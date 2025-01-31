@@ -7,6 +7,7 @@ const API_URL = "http://localhost:3000/auth";
 
 const GoogleLoginButton = () => {
   const navigate = useNavigate();
+  const isGoogleLogin = true;
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -32,7 +33,7 @@ const GoogleLoginButton = () => {
         const { email, given_name: username, sub: password } = userInfo.data;
         console.log("User Info:", userInfo.data);
 
-        const payload = { username, email, password };
+        const payload = { username, email, password, isGoogleLogin };
 
         const res = await axios.post(`${API_URL}`, payload, {
           headers: {

@@ -36,6 +36,7 @@
 }
 
 .deleteBtn {
+  padding: 0;
   height: 2rem;
   aspect-ratio: 1;
   border-radius: 50%;

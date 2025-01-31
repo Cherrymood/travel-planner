@@ -14,6 +14,7 @@ export default function Authorization() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -22,6 +23,8 @@ export default function Authorization() {
   const API_URL = "http://localhost:3000/auth";
 
   async function handleSubmit(e) {
+    const isGoogleLogin = false;
+
     e.preventDefault();
 
     if (!email || !password || (!isLoginMode && !username)) {
@@ -32,23 +35,37 @@ export default function Authorization() {
 
     try {
       const payload = isLoginMode
-        ? { email, password }
-        : { username, email, password };
+        ? { email, password, isGoogleLogin }
+        : { username, email, password, isGoogleLogin };
 
       const response = await axios.post(`${API_URL}`, payload, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-
       const { token } = response.data;
 
-      if (isLoginMode && token) {
+      if (token) {
         localStorage.setItem("authToken", token);
       }
+
+      setErrorMessage(""); // Clear error on success
+
       navigate("/app/cities");
     } catch (error) {
-      console.error("Error:", error.response?.data || error.message);
+      setLoading(false);
+
+      if (error.response) {
+        setErrorMessage(
+          "Server responded with an error:",
+          error.response.status,
+          error.response.data
+        );
+      } else if (error.request) {
+        setErrorMessage("No response received from the server:", error.request);
+      } else {
+        setErrorMessage("Error setting up the request:", error.message);
+      }
     }
   }
 
@@ -116,6 +133,9 @@ export default function Authorization() {
             <GoogleLoginButton />
           </GoogleOAuthProvider>
         </form>
+        {errorMessage && (
+          <div className={styles.errorPopup}>{errorMessage}</div>
+        )}
       </div>
     </main>
   );

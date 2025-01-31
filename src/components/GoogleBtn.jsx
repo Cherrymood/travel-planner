@@ -3,17 +3,18 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./GoogleBtn.css";
 
-const API_URL = "http://localhost:3000/auth/";
+const API_URL = "http://localhost:3000/auth";
 
 const GoogleLoginButton = () => {
   const navigate = useNavigate();
+
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       console.log("Token Response:", tokenResponse.access_token);
 
-      if (tokenResponse.access_token) {
-        localStorage.setItem("authToken", tokenResponse.access_token);
-      }
+      // if (tokenResponse.access_token) {
+      //   localStorage.setItem("authToken", tokenResponse.access_token);
+      // }
 
       try {
         const userInfo = await axios.get(
@@ -28,17 +29,20 @@ const GoogleLoginButton = () => {
           return;
         }
 
-        // const { email, username, password } = userInfo.data;
+        const { email, given_name: username, sub: password } = userInfo.data;
+        console.log("User Info:", userInfo.data);
 
-        // const payload = { username, email, password };
+        const payload = { username, email, password };
 
-        // await axios.post(`${API_URL}`, payload, {
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        // });
+        const res = await axios.post(`${API_URL}`, payload, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-        // console.log("User Info:", userInfo.data);
+        console.log("Token:", res.data);
+
+        localStorage.setItem("authToken", res.data.token);
 
         navigate("/app/cities");
       } catch (error) {
@@ -48,19 +52,19 @@ const GoogleLoginButton = () => {
     onError: (error) => {
       console.log("Login Failed:", error);
     },
-    flow: "popup",
+    flow: "implicit",
   });
 
   return (
-    <button class="gsi-material-button" onClick={googleLogin}>
-      <div class="gsi-material-button-state"></div>
-      <div class="gsi-material-button-content-wrapper">
-        <div class="gsi-material-button-icon">
+    <button className="gsi-material-button" onClick={() => googleLogin()}>
+      <div className="gsi-material-button-state"></div>
+      <div className="gsi-material-button-content-wrapper">
+        <div className="gsi-material-button-icon">
           <svg
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 48 48"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
           >
             <path
               fill="#EA4335"
@@ -81,7 +85,9 @@ const GoogleLoginButton = () => {
             <path fill="none" d="M0 0h48v48H0z"></path>
           </svg>
         </div>
-        <span class="gsi-material-button-contents">Sign in with Google</span>
+        <span className="gsi-material-button-contents">
+          Sign in with Google
+        </span>
       </div>
     </button>
   );

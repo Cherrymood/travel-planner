@@ -13,6 +13,7 @@ import { StatusCodes } from "http-status-codes";
 export default async function authentication(req, res) {
   try {
     const { email, password } = req.body;
+
     console.log("Req.body", req.body);
 
     if (!email || !password) {

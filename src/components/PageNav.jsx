@@ -23,7 +23,6 @@ export default function PageNav() {
               className={styles.ctaLink}
               onClick={() => {
                 localStorage.removeItem("authToken");
-                // window.location.reload(); // Optional: Refresh the page to reflect changes
               }}
             >
               Sign Out

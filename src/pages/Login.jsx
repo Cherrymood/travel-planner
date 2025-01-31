@@ -4,8 +4,9 @@ import axios from "axios";
 import PageNav from "../components/PageNav";
 import styles from "./Login.module.css";
 import Button from "../components/Button.jsx";
-import GoogleBtn from "../components/GoogleBtn.jsx";
 import { useNavigate } from "react-router-dom";
+import GoogleLoginButton from "../components/GoogleBtn.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function Authorization() {
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -15,6 +16,8 @@ export default function Authorization() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  // console.log(clientId);
 
   const API_URL = "http://localhost:3000/auth";
 
@@ -28,12 +31,11 @@ export default function Authorization() {
     setLoading(true);
 
     try {
-      const endpoint = isLoginMode ? "/login" : "/register";
       const payload = isLoginMode
         ? { email, password }
         : { username, email, password };
 
-      const response = await axios.post(`${API_URL}${endpoint}`, payload, {
+      const response = await axios.post(`${API_URL}`, payload, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -43,41 +45,12 @@ export default function Authorization() {
 
       if (isLoginMode && token) {
         localStorage.setItem("authToken", token);
-
-        // console.log("Token saved:", token);
       }
       navigate("/app/cities");
     } catch (error) {
       console.error("Error:", error.response?.data || error.message);
     }
   }
-
-  const handleGoogle = async (response) => {
-    setLoading(true);
-
-    try {
-      const res = await fetch(`${API_URL}/google`, {
-        method: "GET",
-        credentials: "include",
-      });
-
-      const data = await res.json();
-      setLoading(false);
-
-      if (res.ok) {
-        if (data?.user && data?.token) {
-          localStorage.setItem("token", data.token);
-        }
-      } else {
-        throw new Error(data?.message || "Authentication failed");
-      }
-    } catch (error) {
-      setLoading(false);
-      console.error("Error during Google authentication:", error.message);
-      // Display error to the user
-      alert("Google authentication failed: " + error.message);
-    }
-  };
 
   return (
     <main className={styles.login}>
@@ -97,7 +70,6 @@ export default function Authorization() {
               />
             </div>
           )}
-
           <div className={styles.row}>
             <label htmlFor="email">Email</label>
             <input
@@ -109,7 +81,6 @@ export default function Authorization() {
               required
             />
           </div>
-
           <div className={styles.row}>
             <label htmlFor="password">Password</label>
             <input
@@ -121,7 +92,6 @@ export default function Authorization() {
               required
             />
           </div>
-
           <div className={styles.buttons}>
             <Button type="primary" disabled={loading}>
               {loading
@@ -142,7 +112,9 @@ export default function Authorization() {
               {isLoginMode ? "Switch to Sign Up" : "Switch to Login"}
             </Button>
           </div>
-          <GoogleBtn onClick={handleGoogle}>Sign In with Google</GoogleBtn>
+          <GoogleOAuthProvider clientId={clientId}>
+            <GoogleLoginButton />
+          </GoogleOAuthProvider>
         </form>
       </div>
     </main>

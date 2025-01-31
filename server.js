@@ -7,11 +7,10 @@ import env from "dotenv";
 import xss from "xss-clean";
 import { rateLimit } from "express-rate-limit";
 import session from "express-session";
-import passport from "./server/controllers/passportConfig.js";
 
 import citiesRouter from "./server/routes/citiesRoutes.js";
 import authUser from "./server/middleware/authentication.js";
-import authRoutes from "./server/routes/authenticationRoutes.js";
+import authRoute from "./server/routes/authenticationRoutes.js";
 
 import notFoundMiddleware from "./server/middleware/not-found.js";
 import errorHandlerMiddleware from "./server/middleware/error-handler.js";
@@ -30,7 +29,6 @@ app.use(helmet()); //Sets Security Headers,Protects Against Certain Attacks
 app.use(
   cors({
     origin: "http://localhost:5173",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })
 );
@@ -46,25 +44,9 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.get("/auth/google/proxy", (req, res) => {
-  const googleAuthUrl = "https://accounts.google.com/o/oauth2/v2/auth";
-  const redirectUrl = `${googleAuthUrl}?response_type=code&redirect_uri=${encodeURIComponent(
-    "http://localhost:3000/auth/google/callback"
-  )}&scope=email%20profile&client_id=${process.env.GOOGLE_CLIENT_ID}`;
-
-  req(redirectUrl, (error, response, body) => {
-    if (error) {
-      return res.status(500).send(error.message);
-    }
-    res.send(body);
-  });
-});
-
-app.use(passport.initialize()); // init passport on every route call
-app.use(passport.session()); //allow passport to use "express-session"
 
 // ROUTES
-app.use("/auth", authRoutes);
+app.use("/auth", authRoute);
 app.use("/app/cities", authUser, citiesRouter);
 
 app.use(notFoundMiddleware);

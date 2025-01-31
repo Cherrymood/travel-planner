@@ -1,27 +1,42 @@
 import User from "../models/User.js";
 import { StatusCodes } from "http-status-codes";
-import env from "dotenv";
 
-env.config();
+// async function register(req, res) {
+//   const user = await User.create({ ...req.body });
+//   const token = user.createJWT();
 
-async function register(req, res) {
-  const user = await User.create({ ...req.body });
-  const token = user.createJWT();
+//   res
+//     .status(StatusCodes.CREATED)
+//     .json({ user: { name: user.username }, token });
+// }
 
-  res
-    .status(StatusCodes.CREATED)
-    .json({ user: { name: user.username }, token });
-}
-
-async function login(req, res) {
+export default async function authentication(req, res) {
   try {
-    const user = await User.checkExistUser(req.body);
-    const token = user.createJWT();
+    const { email, password } = req.body;
+    console.log("Req.body", req.body);
 
-    res.status(StatusCodes.OK).json({ user: { name: user.username }, token });
+    if (!email || !password) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: "Email and password are required" });
+    }
+
+    let user = await User.checkExistUser(req.body);
+
+    if (!user) {
+      const { email, password, username } = req.body;
+
+      user = await User.create({ email, password, username });
+      return res
+        .status(StatusCodes.CREATED)
+        .json({ user: { name: user.username }, token: user.createJWT() });
+    }
+
+    res
+      .status(StatusCodes.OK)
+      .json({ user: { name: user.username }, token: user.createJWT() });
   } catch (error) {
-    res.status(StatusCodes.UNAUTHORIZED).json({ error: error.message });
+    console.error("Authentication error:", error);
+    res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
   }
 }
-
-export { register, login };

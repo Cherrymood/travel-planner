@@ -23,9 +23,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     minlength: 6,
     select: false,
-  },
-  googleId: {
-    type: String,
+    required: [true, "Please provide password"],
   },
 });
 
@@ -51,14 +49,21 @@ UserSchema.methods.comparePassword = async function (password) {
 
 UserSchema.statics.checkExistUser = async function (body) {
   const { email, password } = body;
+  console.log(body);
+
   if (!email || !password) {
     throw new BadRequestError("Please provide email and password");
   }
-  const user = await this.findOne({ email });
+  const user = await this.findOne({ email }).select("+password");
+
+  console.log("Returned object", user);
+
   if (!user) {
-    throw new UnauthenticatedError("Invalid Credentials");
+    return null;
   }
   const isPasswordCorrect = await user.comparePassword(password);
+  console.log(isPasswordCorrect);
+
   if (!isPasswordCorrect) {
     throw new UnauthenticatedError("Invalid Credentials");
   }

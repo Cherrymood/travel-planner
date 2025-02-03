@@ -1,4 +1,4 @@
-import Sidebar from "../components/SIdebar";
+import Sidebar from "../components/Sidebar";
 import Map from "../components/Map";
 import React from "react";
 import styles from "./AppLayout.module.css";

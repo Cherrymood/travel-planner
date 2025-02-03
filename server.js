@@ -28,7 +28,21 @@ app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(helmet()); //Sets Security Headers,Protects Against Certain Attacks
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "http://travel-planner.horodnycha.com:5173",
+      ];
+      if (
+        !origin ||
+        allowedOrigins.indexOf(origin) !== -1 ||
+        origin.endsWith(".horodnycha.com")
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );

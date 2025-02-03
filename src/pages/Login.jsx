@@ -49,7 +49,7 @@ export default function Authorization() {
         localStorage.setItem("authToken", token);
       }
 
-      setErrorMessage(""); // Clear error on success
+      setErrorMessage("");
 
       navigate("/app/cities");
     } catch (error) {

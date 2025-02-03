@@ -7,5 +7,6 @@ export default defineConfig({
   plugins: [react(), eslint()],
   server: {
     host: "0.0.0.0",
+    allowedHosts: ["travel-planner.horodnycha.com"],
   },
 });

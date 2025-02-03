@@ -20,7 +20,7 @@ export default function Authorization() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   // console.log(clientId);
 
-  const API_URL = "http://localhost:3000/auth";
+  const API_URL = "http://travel-planner.horodnycha.com/:3000/auth";
 
   async function handleSubmit(e) {
     const isGoogleLogin = false;

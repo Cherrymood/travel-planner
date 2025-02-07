@@ -1,6 +1,5 @@
 import User from "../models/User.js";
 import { StatusCodes } from "http-status-codes";
-import { UnauthenticatedError } from "../errors/index.js";
 
 export default async function authentication(req, res) {
   try {

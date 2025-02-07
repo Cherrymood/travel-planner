@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./GoogleBtn.css";
 
-const API_URL = "http://localhost:3000/auth";
+const API_URL = "http://travel-planner.horodnycha.com:3000/auth";
 
 const GoogleLoginButton = () => {
   const navigate = useNavigate();
@@ -12,10 +12,6 @@ const GoogleLoginButton = () => {
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       console.log("Token Response:", tokenResponse.access_token);
-
-      // if (tokenResponse.access_token) {
-      //   localStorage.setItem("authToken", tokenResponse.access_token);
-      // }
 
       try {
         const userInfo = await axios.get(

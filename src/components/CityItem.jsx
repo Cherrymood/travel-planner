@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useCities } from "../contexts/CitiesContext";
 import React from "react";
+// import TodoListApp from "./todo/src/App";
 import styles from "./CityItem.module.css";
 
 const formatDate = (date) =>
@@ -30,6 +31,7 @@ function CityItem({ city }) {
         <span className={styles.emoji}>{emoji}</span>
         <h3 className={styles.name}>{cityName}</h3>
         <time className={styles.date}>({formatDate(date)})</time>
+        {/* <TodoListApp /> */}
 
         <button className={styles.deleteBtn} onClick={handleClick}>
           &times;

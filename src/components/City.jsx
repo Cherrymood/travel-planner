@@ -43,11 +43,6 @@ export default function City() {
   const [isEditing, setIsEditing] = useState(false);
   const [newDate, setNewDate] = useState(date);
   const [newNotes, setNewNotes] = useState(notes);
-  // console.log("CurrentCity.city", currentCity);
-
-  // console.log("NewDate", newDate);
-  // console.log("NewNate", newNotes);
-  // console.log("isEditing", isEditing);
 
   if (isLoading) return <Spinner />;
 
@@ -57,7 +52,7 @@ export default function City() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    // console.log(newDate, newNotes, id);
+
     updateCity(id, newDate, newNotes);
     setIsEditing(!isEditing);
   }

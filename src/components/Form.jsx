@@ -21,7 +21,7 @@ export function convertToEmoji(countryCode) {
   return String.fromCodePoint(...codePoints);
 }
 
-const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
+const BASE_URL = import.meta.env.VITE_BASE_URL_GOOGLE;
 
 export default function Form() {
   const [lat, lng] = useUrlPosition();

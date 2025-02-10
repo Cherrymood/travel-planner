@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./GoogleBtn.css";
 
-const API_URL = "http://travel-planner.horodnycha.com:3000/auth";
+const API_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
 
 const GoogleLoginButton = () => {
   const navigate = useNavigate();

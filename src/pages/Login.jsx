@@ -20,7 +20,7 @@ export default function Authorization() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   // console.log(clientId);
 
-  const API_URL = "http://travel-planner.horodnycha.com:3000/auth";
+  const API_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
 
   async function handleSubmit(e) {
     const isGoogleLogin = false;
@@ -38,7 +38,7 @@ export default function Authorization() {
         ? { email, password, isGoogleLogin }
         : { username, email, password, isGoogleLogin };
 
-      const response = await axios.post(`${API_URL}`, payload, {
+      const response = await axios.post(`${API_URL}/auth`, payload, {
         headers: {
           "Content-Type": "application/json",
         },

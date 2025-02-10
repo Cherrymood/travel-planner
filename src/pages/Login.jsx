@@ -20,7 +20,7 @@ export default function Authorization() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   // console.log(clientId);
 
-  const API_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
+  const API_URL = import.meta.env.VITE_BASE_URL;
 
   async function handleSubmit(e) {
     const isGoogleLogin = false;

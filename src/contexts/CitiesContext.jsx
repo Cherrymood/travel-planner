@@ -137,6 +137,8 @@ function CitiesProvider({ children }) {
 
     const headers = verifyToken();
 
+    console.log(newCity);
+
     try {
       const res = await fetch(`${BASE_URL}/app/cities`, {
         method: "POST",
@@ -207,7 +209,6 @@ function CitiesProvider({ children }) {
         throw new Error("Failed to delete city");
       }
 
-      // Directly update the local state
       dispatch({ type: "city/deleted", payload: id });
     } catch (error) {
       dispatch({

@@ -5,11 +5,7 @@ import React from "react";
 
 import styles from "./City.module.css";
 import Spinner from "./Spinner";
-import BackButton from "./BackButton";
-import Button from "./Button";
-import "react-datepicker/dist/react-datepicker.css";
-import DatePicker from "react-datepicker";
-import styles1 from "./Form.module.css";
+import EditCity from "./EditCity";
 
 const formatDate = (date) => {
   const validDate = new Date(date);
@@ -29,8 +25,6 @@ const formatDate = (date) => {
 export default function City() {
   const { id } = useParams();
   const { currentCity, getCity, isLoading, updateCity } = useCities();
-  // console.log("CurrentCity", currentCity);
-
   const { cityName, emoji, date, notes } = currentCity;
 
   useEffect(
@@ -41,8 +35,6 @@ export default function City() {
   );
 
   const [isEditing, setIsEditing] = useState(false);
-  const [newDate, setNewDate] = useState(date);
-  const [newNotes, setNewNotes] = useState(notes);
 
   if (isLoading) return <Spinner />;
 
@@ -50,47 +42,17 @@ export default function City() {
     setIsEditing(true);
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    updateCity(id, newDate, newNotes);
-    setIsEditing(!isEditing);
-  }
+  if (isLoading || !currentCity) return <Spinner />;
 
   return (
     <div className={styles.city}>
       {isEditing ? (
-        <form
-          className={`${styles1.form} ${isLoading ? styles.loading : ""}`}
-          onSubmit={handleSubmit}
-        >
-          <div className={styles1.row}>
-            <label htmlFor="newDate">When did you go to {cityName}?</label>
-
-            <DatePicker
-              id="newDate"
-              onChange={(newDate) => setNewDate(newDate)}
-              // onChange={(e) => console.log(e.target.value)}
-              selected={newDate}
-            />
-          </div>
-
-          <div className={styles1.row}>
-            <label htmlFor="newNotes">
-              Notes about your trip to {cityName}
-            </label>
-            <textarea
-              id="newNotes"
-              onChange={(e) => setNewNotes(e.target.value)}
-              // onChange={(e) => console.log(e.target.value)}
-              value={newNotes}
-            />
-          </div>
-
-          <div className={styles1.row}>
-            <Button type="submit">Save</Button>
-          </div>
-        </form>
+        <EditCity
+          setIsEditing={setIsEditing}
+          id={id}
+          updateCity={updateCity}
+          currentCity={currentCity}
+        />
       ) : (
         <>
           <div className={styles.row}>
@@ -125,10 +87,6 @@ export default function City() {
           </div>
         </>
       )}
-
-      <div>
-        <BackButton />
-      </div>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import Button from "./Button";
 import BackButton from "./BackButton";
 import Message from "./Message";
 import Spinner from "./Spinner";
+import Todo from "./ToDo/Todo";
 
 import styles from "./Form.module.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -119,9 +120,9 @@ export default function Form() {
       </div>
 
       <div className={styles.row}>
-        <label htmlFor="notes">Notes about your trip to {cityName}</label>
+        <label htmlFor="notes">To Do in City {cityName}</label>
         <textarea
-          id="notes"
+          id="todolist"
           onChange={(e) => setNotes(e.target.value)}
           value={notes}
         />

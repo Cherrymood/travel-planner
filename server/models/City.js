@@ -30,7 +30,7 @@ const CitySchema = new mongoose.Schema(
     notes: {
       type: String,
       maxlength: 500,
-      default: "",
+      required: true,
     },
     position: {
       lat: {

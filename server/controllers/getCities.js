@@ -17,7 +17,7 @@ const getCities = async (req, res) => {
 };
 
 const getCity = async (req, res) => {
-  console.log("Req", req.params.id);
+  // console.log("Req", req.params.id);
 
   const {
     user: { userId },

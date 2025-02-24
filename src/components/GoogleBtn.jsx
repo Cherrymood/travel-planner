@@ -11,8 +11,6 @@ const GoogleLoginButton = () => {
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log("Token Response:", tokenResponse.access_token);
-
       try {
         const userInfo = await axios.get(
           "https://www.googleapis.com/oauth2/v3/userinfo",
@@ -27,17 +25,14 @@ const GoogleLoginButton = () => {
         }
 
         const { email, given_name: username, sub: password } = userInfo.data;
-        console.log("User Info:", userInfo.data);
 
         const payload = { username, email, password, isGoogleLogin };
 
-        const res = await axios.post(`${API_URL}`, payload, {
+        const res = await axios.post(`${API_URL}/auth`, payload, {
           headers: {
             "Content-Type": "application/json",
           },
         });
-
-        console.log("Token:", res.data);
 
         localStorage.setItem("authToken", res.data.token);
 

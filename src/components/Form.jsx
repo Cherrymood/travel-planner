@@ -7,7 +7,6 @@ import Button from "./Button";
 import BackButton from "./BackButton";
 import Message from "./Message";
 import Spinner from "./Spinner";
-import Todo from "./ToDo/Todo";
 
 import styles from "./Form.module.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -82,7 +81,6 @@ export default function Form() {
       notes,
       position: { lat: +lat, lng: +lng },
     };
-    // console.log(`New City from form:`, newCity);
     await createCity(newCity);
     navigate("/app/cities");
   }
@@ -122,7 +120,7 @@ export default function Form() {
       <div className={styles.row}>
         <label htmlFor="notes">To Do in City {cityName}</label>
         <textarea
-          id="todolist"
+          id="notes"
           onChange={(e) => setNotes(e.target.value)}
           value={notes}
         />

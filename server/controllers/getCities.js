@@ -1,7 +1,7 @@
 import City from "../models/City.js";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError } from "../errors/index.js";
-import handleErrors from "../utils/parseValidationErrors.js";
+import parseValidationErrors from "../util/parseValidationErrors.js";
 
 const getCities = async (req, res) => {
   const userId = req.user.userId;
@@ -43,7 +43,7 @@ const createCity = async (req, res) => {
 
     res.status(StatusCodes.CREATED).json({ city });
   } catch (error) {
-    handleErrors(error, req);
+    parseValidationErrors(error, req);
     res.status(StatusCodes.BAD_REQUEST).json({ error: "Invalid input data" });
   }
 };

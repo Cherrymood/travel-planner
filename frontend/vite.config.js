@@ -9,4 +9,7 @@ export default defineConfig({
     host: "0.0.0.0",
     allowedHosts: ["travel-planner.horodnycha.com"],
   },
+  optimizeDeps: {
+    exclude: ["@react-oauth/google"],
+  },
 });

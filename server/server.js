@@ -9,14 +9,14 @@ import { rateLimit } from "express-rate-limit";
 import session from "express-session";
 import flash from "connect-flash";
 
-import citiesRouter from "./server/routes/citiesRoutes.js";
-import authUser from "./server/middleware/authentication.js";
-import authRoute from "./server/routes/authenticationRoutes.js";
+import citiesRouter from "./routes/citiesRoutes.js";
+import authUser from "./middleware/authentication.js";
+import authRoute from "./routes/authenticationRoutes.js";
 
-import notFoundMiddleware from "./server/middleware/not-found.js";
-import errorHandlerMiddleware from "./server/middleware/error-handler.js";
+import notFoundMiddleware from "./middleware/not-found.js";
+import errorHandlerMiddleware from "./middleware/error-handler.js";
 
-import connectDB from "./server/db/connectDB.js";
+import connectDB from "./db/connectDB.js";
 
 env.config();
 

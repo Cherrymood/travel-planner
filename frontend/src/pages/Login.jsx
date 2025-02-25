@@ -1,7 +1,7 @@
 import { useState } from "react";
 import React from "react";
 import axios from "axios";
-import PageNav from "../components/PageNav";
+import PageNav from "../components/PageNav.jsx";
 import styles from "./Login.module.css";
 import Button from "../components/Button.jsx";
 import { useNavigate } from "react-router-dom";

@@ -14,7 +14,6 @@ export default function Authorization() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const [notification, setNotification] = useState(null);
 
   const navigate = useNavigate();
@@ -58,7 +57,6 @@ export default function Authorization() {
         showNotification("Login successful!", "success");
       }
 
-      setErrorMessage("");
       navigate("/app/cities");
     } catch (error) {
       setLoading(false);

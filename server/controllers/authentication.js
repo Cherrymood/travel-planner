@@ -5,8 +5,6 @@ export default async function authentication(req, res) {
   try {
     const { email, password } = req.body;
 
-    console.log("Req.body", req.body);
-
     if (!email || !password) {
       return res
         .status(StatusCodes.BAD_REQUEST)

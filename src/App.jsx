@@ -14,10 +14,10 @@ import { CitiesProvider } from "./contexts/CitiesContext";
 
 export default function App() {
   return (
-    <CitiesProvider>
-      <BrowserRouter
-        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-      >
+    <BrowserRouter
+      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+    >
+      <CitiesProvider>
         <Routes>
           <Route index element={<HomePage />} />
           <Route path="product" element={<Product />} />
@@ -32,8 +32,7 @@ export default function App() {
           </Route>
           <Route path="*" element={<PageNotFound />} />
         </Routes>
-      </BrowserRouter>
-    </CitiesProvider>
+      </CitiesProvider>
+    </BrowserRouter>
   );
 }
-//matching url to ui pages works on client side, it will never be reloaded

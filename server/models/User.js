@@ -71,12 +71,3 @@ UserSchema.statics.checkExistUser = async function (body) {
 };
 
 export default mongoose.model("User", UserSchema);
-
-///Why checkExistUser Should Be Static
-// Collection-Level Operation:
-// checkExistUser operates at the collection level because it involves searching for a user in the database (e.g., using findOne).
-// It does not rely on an existing document instance since you're trying to find the document in the first place.
-// No Access to Specific Document:
-// When a user is trying to log in, you don't already have a User document instance to work with. You need to search for it using the static method.
-// Consistency with Mongoose Practices:
-// Static methods are typically used in Mongoose for operations like querying the database or performing utility functions that don't require document instance data.

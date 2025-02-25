@@ -25,9 +25,9 @@ const port = 3000;
 
 // Middleware
 app.set("trust proxy", 1);
-app.use(flash());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
-app.use(helmet()); //Sets Security Headers,Protects Against Certain Attacks
+app.use(helmet());
+// app.use(storeLocls());
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -35,16 +35,16 @@ app.use(
         "http://localhost:5173",
         "http://travel-planner.horodnycha.com:5173",
       ];
-      if (
-        !origin ||
-        allowedOrigins.indexOf(origin) !== -1 ||
-        origin.endsWith(".horodnycha.com")
-      ) {
+
+      if (!origin || allowedOrigins.includes(origin)) {
+        // Allow the request
         callback(null, true);
       } else {
+        // Reject the request
         callback(new Error("Not allowed by CORS"));
       }
     },
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })
 );
@@ -55,17 +55,12 @@ app.use(
     saveUninitialized: true,
   })
 );
+app.use(flash());
 app.use(xss());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use((req, res, next) => {
-  res.locals.info = req.flash("info");
-  res.locals.errors = req.flash("error");
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
 
 // ROUTES
 app.use("/auth", authRoute);

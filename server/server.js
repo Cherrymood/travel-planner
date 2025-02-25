@@ -8,6 +8,7 @@ import xss from "xss-clean";
 import { rateLimit } from "express-rate-limit";
 import session from "express-session";
 import flash from "connect-flash";
+import MongoStore from "connect-mongo";
 
 import citiesRouter from "./routes/citiesRoutes.js";
 import authUser from "./middleware/authentication.js";
@@ -52,7 +53,15 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: "mongodb://localhost:27017/your-database",
+      collectionName: "sessions",
+    }),
+    cookie: {
+      secure: false, // Set to true in production with HTTPS
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+    },
   })
 );
 app.use(flash());

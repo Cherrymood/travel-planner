@@ -1,91 +1,147 @@
-// test/cities.test.js
 import * as chai from 'chai';
 import chaiHttp from 'chai-http';
+import chaiAsPromised from 'chai-as-promised';
+import sinon from 'sinon';
+import { expect } from 'chai';
 import mongoose from 'mongoose';
-import City from '../models/City.js'
+import City from '../models/City.js';
+import { BadRequestError, NotFoundError } from "../errors/index.js";
+import { getCities, getCity, createCity, updateCity, deleteCity } from '../controllers/getCities.js';
 
 chai.use(chaiHttp);
-const { expect } = chai;
+chai.use(chaiAsPromised);
 
-describe('Cities API', () => {
-  before(async () => {
-    // Connect to the test database
-    await mongoose.connect('mongodb://localhost:27017/test_db', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+describe('City Controller', () => {
+  let req, res, statusStub, jsonStub;
+
+  beforeEach(() => {
+    req = {
+      user: { userId: 'testUserId' },
+      params: {},
+      body: {}
+    };
+    statusStub = sinon.stub();
+    jsonStub = sinon.stub();
+    res = {
+      status: statusStub,
+      json: jsonStub
+    };
+    statusStub.returns(res);
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  describe('getCities', () => {
+    it('should return cities for a valid user', async () => {
+      const mockCities = [
+        { _id: 'city1', name: 'New York', createdAt: new Date('2023-01-01') },
+        { _id: 'city2', name: 'London', createdAt: new Date('2023-01-02') }
+      ];
+      sinon.stub(City, 'find').resolves(mockCities);
+
+      await getCities(req, res);
+
+      expect(statusStub.calledWith(200)).to.be.true;
+      expect(jsonStub.calledWith({ cities: mockCities, count: 2 })).to.be.true;
+    });
+
+    it('should return 404 if no cities found', async () => {
+      sinon.stub(City, 'find').resolves([]);
+
+      await getCities(req, res);
+
+      expect(statusStub.calledWith(404)).to.be.true;
+      expect(jsonStub.calledWith({ error: "Cities not found" })).to.be.true;
     });
   });
 
-  after(async () => {
-    // Drop the test database and close the connection
-    await City.deleteMany({});
-    await mongoose.connection.close();
-  });
+  describe('getCity', () => {
+    it('should return a city if found', async () => {
+      const mockCity = { _id: 'city1', name: 'New York' };
+      sinon.stub(City, 'findOne').resolves(mockCity);
+      req.params.id = 'city1';
 
-  describe('GET /api/app/cities', () => {
-    it('should get all cities', async () => {
-      const res = await chai.request(app).get('/api/app/cities');
-      expect(res).to.have.status(200);
-      expect(res.body).to.be.an('object');
-      expect(res.body).to.have.property('cities').that.is.an('array');
-      expect(res.body).to.have.property('count').that.is.a('number');
+      await getCity(req, res);
+
+      expect(statusStub.calledWith(200)).to.be.true;
+      expect(jsonStub.calledWith({ city: mockCity })).to.be.true;
+    });
+
+    it('should throw NotFoundError if city not found', async () => {
+      req.params.id = 'nonexistent';
+      sinon.stub(City, 'findOneAndDelete').resolves(null);
+
+      await expect(deleteCity(req, res)).to.be.rejectedWith('No city found with ID nonexistent');
     });
   });
 
-  describe('POST /api/app/cities', () => {
+  describe('createCity', () => {
     it('should create a new city', async () => {
-      const newCity = { name: 'Los Angeles', notes: 'A city in California', date: '2023-01-01' };
-      const res = await chai.request(app).post('/api/app/cities').send(newCity);
-      expect(res).to.have.status(201);
-      expect(res.body).to.have.property('city').that.is.an('object');
-      expect(res.body.city).to.have.property('name').that.equals('Los Angeles');
+      const newCity = { name: 'Paris', country: 'France' };
+      req.body = newCity;
+      const createdCity = { ...newCity, _id: 'newCityId' };
+      sinon.stub(City, 'create').resolves(createdCity);
+
+      await createCity(req, res);
+
+      expect(statusStub.calledWith(201)).to.be.true;
+      expect(jsonStub.calledWith({ city: createdCity })).to.be.true;
+    });
+
+    it('should handle validation errors', async () => {
+      req.body = { name: '' };  // Invalid data
+      const validationError = new mongoose.Error.ValidationError();
+      sinon.stub(City, 'create').rejects(validationError);
+
+      await createCity(req, res);
+
+      expect(statusStub.calledWith(400)).to.be.true;
+      expect(jsonStub.calledWith({ error: "Invalid input data" })).to.be.true;
     });
   });
 
-  describe('GET /api/app/cities:id', () => {
-    let cityId;
-
-    before(async () => {
-      const city = await City.create({ name: 'New York', notes: 'A city in New York', date: '2023-01-01' });
-      cityId = city._id;
-    });
-
-    it('should get a city by ID', async () => {
-      const res = await chai.request(app).get(`/api/app/cities${cityId}`);
-      expect(res).to.have.status(200);
-      expect(res.body).to.have.property('city').that.is.an('object');
-      expect(res.body.city).to.have.property('name').that.equals('New York');
-    });
-  });
-
-  describe('PATCH /api/app/cities:id', () => {
-    let cityId;
-
-    before(async () => {
-      const city = await City.create({ name: 'Chicago', notes: 'A city in Illinois', date: '2023-01-01' });
-      cityId = city._id;
-    });
-
+  describe('updateCity', () => {
     it('should update a city', async () => {
-      const updatedCity = { notes: 'Updated notes', date: '2023-01-02' };
-      const res = await chai.request(app).patch(`/api/app/cities${cityId}`).send(updatedCity);
-      expect(res).to.have.status(200);
-      expect(res.body).to.have.property('message').that.equals('City updated successfully');
+      req.params.id = 'city1';
+      req.body = { notes: 'Updated notes', date: '2023-03-01' };
+      const updatedCity = { _id: 'city1', ...req.body };
+      sinon.stub(City, 'findOneAndUpdate').resolves(updatedCity);
+
+      await updateCity(req, res);
+
+      expect(City.findOneAndUpdate.calledWith(
+        { _id: 'city1', createdBy: 'testUserId' },
+        req.body,
+        { new: true, runValidators: true }
+      )).to.be.true;
+    });
+
+    it('should throw BadRequestError if notes or date is missing', async () => {
+      req.body = { notes: '' };
+
+      await expect(updateCity(req, res)).to.be.rejectedWith('Notes or Date fields cannot be empty');
     });
   });
 
-  describe('DELETE /api/app/cities:id', () => {
-    let cityId;
+  describe('deleteCity', () => {
+    it('should delete a city', async () => {
+      req.params.id = 'city1';
+      const deletedCity = { _id: 'city1', name: 'Deleted City' };
+      sinon.stub(City, 'findOneAndDelete').resolves(deletedCity);
 
-    before(async () => {
-      const city = await City.create({ name: 'Seattle', notes: 'A city in Washington', date: '2023-01-01' });
-      cityId = city._id;
+      await deleteCity(req, res);
+
+      expect(statusStub.calledWith(200)).to.be.true;
+      expect(jsonStub.calledWith({ message: "City deleted successfully" })).to.be.true;
     });
 
-    it('should delete a city', async () => {
-      const res = await chai.request(app).delete(`/api/app/cities${cityId}`);
-      expect(res).to.have.status(200);
-      expect(res.body).to.have.property('message').that.equals('City deleted successfully');
+    it('should throw NotFoundError if city not found', async () => {
+      req.params.id = 'nonexistent';
+      sinon.stub(City, 'findOneAndDelete').resolves(null);
+
+      await expect(deleteCity(req, res)).to.be.rejectedWith('No city found with ID nonexistent');
     });
   });
 });

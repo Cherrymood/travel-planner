@@ -34,6 +34,7 @@ app.use(
       const allowedOrigins = [
         "http://localhost:5173",
         "http://travel-planner.horodnycha.com:5173",
+        "https://travel-planner-backend-ocak.onrender.com",
       ];
       if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
         callback(null, true);

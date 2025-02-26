@@ -28,7 +28,6 @@ const port = 3000;
 app.set("trust proxy", 1);
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(helmet());
-// app.use(storeLocls());
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -36,17 +35,12 @@ app.use(
         "http://localhost:5173",
         "http://travel-planner.horodnycha.com:5173",
       ];
-
-      if (!origin || allowedOrigins.includes(origin)) {
-        // Allow the request
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
         callback(null, true);
       } else {
-        // Reject the request
         callback(new Error("Not allowed by CORS"));
       }
     },
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
   })
 );
 app.use(
@@ -54,10 +48,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: "mongodb://localhost:27017/your-database",
-      collectionName: "sessions",
-    }),
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
     cookie: {
       secure: false, // Set to true in production with HTTPS
       maxAge: 1000 * 60 * 60 * 24, // 1 day

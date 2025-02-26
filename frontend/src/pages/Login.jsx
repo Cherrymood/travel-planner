@@ -81,7 +81,7 @@ export default function Authorization() {
 
   return (
     <main className={styles.login}>
-      <PageNav />
+         <PageNav />
       <div className={styles.form}>
         <form className={styles.form} onSubmit={handleSubmit}>
           {!isLoginMode && (

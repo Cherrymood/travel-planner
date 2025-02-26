@@ -6,9 +6,7 @@ import React from "react";
 export default function PageNav() {
   return (
     <nav className={styles.nav}>
-      <NavLink to="/">
         <Logo />
-      </NavLink>
       <ul>
         <li>
           <NavLink to="/pricing">Pricing</NavLink>

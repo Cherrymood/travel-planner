@@ -28,22 +28,7 @@ const port = 3000;
 app.set("trust proxy", 1);
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(helmet());
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      const allowedOrigins = [
-        "http://localhost:5173",
-        "http://travel-planner.horodnycha.com:5173",
-        "https://travel-planner-backend-ocak.onrender.com",
-      ];
-      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-  })
-);
+app.use(cors());
 app.use(
   session({
     secret: process.env.SESSION_SECRET,

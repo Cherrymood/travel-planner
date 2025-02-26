@@ -9,6 +9,8 @@ import { rateLimit } from "express-rate-limit";
 import session from "express-session";
 import flash from "connect-flash";
 import MongoStore from "connect-mongo";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express"
 
 import citiesRouter from "./routes/citiesRoutes.js";
 import authUser from "./middleware/authentication.js";
@@ -24,7 +26,27 @@ env.config();
 const app = express();
 const port = 3000;
 
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'My API',
+      version: '1.0.0',
+      description: 'API documentation for my full-stack application',
+    },
+    servers: [
+      {
+        url: process.env.BASE_URL,
+      },
+    ],
+  },
+  apis: ['./routes/*.js'],
+};
+// Initialize swagger-jsdoc
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+
 // Middleware
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.set("trust proxy", 1);
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(helmet());
@@ -47,10 +69,12 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use('/api', authRoute);
+app.use('/api', citiesRouter);
 
 // ROUTES
 app.use("/auth", authRoute);
-app.use("/app/cities", authUser, citiesRouter);
+app.use("app/cities", authUser, citiesRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

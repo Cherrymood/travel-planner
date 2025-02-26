@@ -6,8 +6,8 @@ import React from "react";
 export default function PageNav() {
   return (
     <nav className={styles.nav}>
-        <Logo />
       <ul>
+        <li> <Logo /></li>
         <li>
           <NavLink to="/pricing">Pricing</NavLink>
         </li>

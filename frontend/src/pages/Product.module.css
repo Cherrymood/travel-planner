@@ -32,3 +32,31 @@
 .product section a {
   margin-top: 2rem;
 }
+@media (max-width: 768px) {
+  html {
+  font-size: 55%;
+  }
+  
+  .cta:link,
+  .cta:visited {
+  padding: 0.8rem 2rem;
+  font-size: 1.4rem;
+  }
+  
+  input,
+  textarea {
+  padding: 0.6rem 1rem;
+  }
+  }
+  
+  @media (max-width: 480px) {
+  html {
+  font-size: 50%;
+  }
+  
+  .cta:link,
+  .cta:visited {
+  padding: 0.6rem 1.5rem;
+  font-size: 1.2rem;
+  }
+  }

@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import { StatusCodes } from "http-status-codes";
 
+
 export default async function authentication(req, res) {
   try {
     const { email, password } = req.body;

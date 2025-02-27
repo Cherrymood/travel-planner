@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import styles from "./PageNav.module.css";
 import Logo from "./Logo";
 import React from "react";
+import SignOut from "./SignOut";
 
 export default function PageNav() {
   return (
@@ -14,19 +15,7 @@ export default function PageNav() {
         <li>
           <NavLink to="/product">Product</NavLink>
         </li>
-        <li>
-          {localStorage.getItem("authToken") && (
-            <NavLink
-              to="/"
-              className={styles.ctaLink}
-              onClick={() => {
-                localStorage.removeItem("authToken");
-              }}
-            >
-              Sign Out
-            </NavLink>
-          )}
-        </li>
+        <SignOut />
       </ul>
     </nav>
   );

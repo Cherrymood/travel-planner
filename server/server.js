@@ -74,7 +74,7 @@ app.use('/api', citiesRouter);
 
 // ROUTES
 app.use("/auth", authRoute);
-app.use("app/cities", authUser, citiesRouter);
+app.use("/app/cities", authUser, citiesRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
@@ -88,7 +88,6 @@ const startServer = async () => {
       console.log(`Server is running on port ${port}`);
     });
 
-    // Graceful shutdown handling
     process.on("SIGINT", async () => {
       try {
         console.log("Closing server...");

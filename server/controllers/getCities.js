@@ -51,9 +51,12 @@ const createCity = async (req, res) => {
   try {
     req.body.createdBy = req.user.userId;
 
+    console.log("Create city", req.body);
+
     const city = await City.create(req.body);
 
     res.status(StatusCodes.CREATED).json({ city });
+
   } catch (error) {
 
     if (error && error.name === 'ValidationError') {

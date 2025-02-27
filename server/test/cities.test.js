@@ -1,14 +1,11 @@
 import * as chai from 'chai';
-import chaiHttp from 'chai-http';
 import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 import { expect } from 'chai';
 import mongoose from 'mongoose';
 import City from '../models/City.js';
-import { BadRequestError, NotFoundError } from "../errors/index.js";
 import { getCities, getCity, createCity, updateCity, deleteCity } from '../controllers/getCities.js';
 
-chai.use(chaiHttp);
 chai.use(chaiAsPromised);
 
 describe('City Controller', () => {

@@ -24,6 +24,11 @@ import connectDB from "./db/connectDB.js";
 env.config();
 
 const app = express();
+// app.use((req, res, next) => {
+//   console.log('COOP middleware executed');
+//   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin'); 
+//   next();
+// });
 const port = 3000;
 
 const swaggerOptions = {

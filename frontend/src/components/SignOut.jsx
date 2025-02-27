@@ -1,21 +1,27 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./PageNav.module.css";
-import { NavLink } from "react-router-dom";
+import Button from "./Button";
 
 export default function SignOut() {
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    localStorage.removeItem("authToken");
+    navigate("/");
+    window.location.reload();
+  };
 
   return (
     <li>
-          {localStorage.getItem("authToken") && (
-            <NavLink
-              to="/"
-              className={styles.ctaLink}
-              onClick={() => {
-                localStorage.removeItem("authToken");
-              }}
-            >
-              Sign Out
-            </NavLink>
-          )}
-        </li>
+      {localStorage.getItem("authToken") && (
+        <Button
+          className={styles.ctaLink}
+          onClick={handleSignOut}
+        >
+          Sign Out
+        </Button>
+      )}
+    </li>
   );
 }

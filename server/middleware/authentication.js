@@ -6,7 +6,7 @@ export default async function auth(req, res, next) {
     req.cookies.token || req.header("Authorization")?.replace("Bearer ", "");
 
   if (!token) {
-    return UnauthenticatedError("Invalid user ID");
+    return new UnauthenticatedError("Invalid user ID");
   }
 
   try {

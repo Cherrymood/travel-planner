@@ -18,3 +18,19 @@
   color: var(--color-light--1);
 }
 
+.sidebarContent {
+  display: flex; /* Enable flexbox */
+  align-items: center; /* Center items vertically */
+  justify-content: space-between; /* Space items evenly */
+}
+
+.logo {
+  width: 50px; 
+  height: auto; 
+  margin-right: 10px; 
+}
+
+.signOut {
+  font-size: 12px; 
+  padding: 5px 10px; 
+}

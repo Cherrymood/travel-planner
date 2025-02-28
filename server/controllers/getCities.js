@@ -5,7 +5,7 @@ import { BadRequestError, NotFoundError } from "../errors/index.js";
 const getCities = async (req, res) => {
   const userId = req.user.userId;
 
-  const cities = await City.find({ createdBy: userId }).sort("createdAt");
+  const cities = await City.find({ createdBy: userId });
 
   if (!cities) {
     return res

@@ -61,9 +61,15 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    cookie: {
+      secure: false, // Set to true in production with HTTPS
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+    },
   })
 );
+app.use(flash());
 app.use(xss());
 app.use(logger("dev"));
 app.use(express.json());
@@ -79,7 +85,7 @@ app.use("/app/cities", authUser, citiesRouter);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
-const startServer = async () => {
+export const startServer = async () => {
   try {
     await connectDB(process.env.MONGO_URI);
     console.log("Database connected successfully");

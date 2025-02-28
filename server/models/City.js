@@ -11,13 +11,13 @@ const CitySchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 3,
-      maxlength: 25,
+      maxlength: 40,
       unique: true,
     },
     country: {
       type: String,
       required: true,
-      maxlength: 25,
+      maxlength: 40,
     },
     date: {
       type: Date,
@@ -29,7 +29,7 @@ const CitySchema = new mongoose.Schema(
     },
     notes: {
       type: String,
-      maxlength: 500,
+      maxlength: 1000,
       default: "",
     },
     position: {

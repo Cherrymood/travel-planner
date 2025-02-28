@@ -24,11 +24,6 @@ import connectDB from "./db/connectDB.js";
 env.config();
 
 const app = express();
-// app.use((req, res, next) => {
-//   console.log('COOP middleware executed');
-//   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin'); 
-//   next();
-// });
 const port = 3000;
 
 const swaggerOptions = {
@@ -40,6 +35,7 @@ const swaggerOptions = {
       description: 'API documentation for my full-stack application',
     },
     servers: [
+
       {
         url: process.env.BASE_URL,
       },
@@ -47,15 +43,20 @@ const swaggerOptions = {
   },
   apis: ['./routes/*.js'],
 };
+
 // Initialize swagger-jsdoc
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
-
 // Middleware
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.set("trust proxy", 1);
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
-app.use(helmet());
-app.use(cors());
+app.use(helmet()); //Sets Security Headers,Protects Against Certain Attacks
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -84,7 +85,7 @@ app.use("/app/cities", authUser, citiesRouter);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
-const startServer = async () => {
+export const startServer = async () => {
   try {
     await connectDB(process.env.MONGO_URI);
     console.log("Database connected successfully");
@@ -93,6 +94,7 @@ const startServer = async () => {
       console.log(`Server is running on port ${port}`);
     });
 
+    // Graceful shutdown handling
     process.on("SIGINT", async () => {
       try {
         console.log("Closing server...");
@@ -111,6 +113,3 @@ const startServer = async () => {
 };
 
 startServer();
-
-
-export default startServer;

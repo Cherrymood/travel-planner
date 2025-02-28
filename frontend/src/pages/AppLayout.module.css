@@ -3,19 +3,4 @@
   padding: 2.4rem;
   overscroll-behavior-y: none;
   display: flex;
-  position: relative;
-  }
-  
-  @media (max-width: 768px) {
-  .app {
-  flex-direction: column;
-  }
-  }
-  
-  @media (max-width: 480px) {
-  .app {
-  flex-direction: column;
-  }
-  }
-  
-  
+  position: relative;}

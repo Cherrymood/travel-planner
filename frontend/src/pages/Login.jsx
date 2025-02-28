@@ -14,13 +14,19 @@ export default function Authorization() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [notification, setNotification] = useState(null);
 
   const navigate = useNavigate();
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  // console.log(clientId);
+  const API_URL = import.meta.env.VITE_BASE_URL;
 
-  const API_URL = "http://localhost:3000/auth";
+  const showNotification = (message, type = "error") => {
+    setNotification({ message, type });
+
+    setTimeout(() => {
+      setNotification(null);
+    }, 3000); // Clear notification after 3 seconds
+  };
 
   async function handleSubmit(e) {
     const isGoogleLogin = false;
@@ -28,6 +34,7 @@ export default function Authorization() {
     e.preventDefault();
 
     if (!email || !password || (!isLoginMode && !username)) {
+      showNotification("Please fill in all required fields.");
       return;
     }
 
@@ -38,7 +45,7 @@ export default function Authorization() {
         ? { email, password, isGoogleLogin }
         : { username, email, password, isGoogleLogin };
 
-      const response = await axios.post(`${API_URL}`, payload, {
+      const response = await axios.post(`${API_URL}/auth`, payload, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -47,31 +54,34 @@ export default function Authorization() {
 
       if (token) {
         localStorage.setItem("authToken", token);
+        showNotification("Login successful!", "success");
       }
-
-      setErrorMessage("");
 
       navigate("/app/cities");
     } catch (error) {
       setLoading(false);
 
       if (error.response) {
-        setErrorMessage(
-          "Server responded with an error:",
-          error.response.status,
-          error.response.data
+        showNotification(
+          `Server responded with an error: ${
+            error.response.data.error || "Unknown error"
+          }`,
+          "error"
         );
       } else if (error.request) {
-        setErrorMessage("No response received from the server:", error.request);
+        showNotification("No response received from the server.", "error");
       } else {
-        setErrorMessage("Error setting up the request:", error.message);
+        showNotification(
+          `Error setting up the request: ${error.message}`,
+          "error"
+        );
       }
     }
   }
 
   return (
     <main className={styles.login}>
-      <PageNav />
+         <PageNav />
       <div className={styles.form}>
         <form className={styles.form} onSubmit={handleSubmit}>
           {!isLoginMode && (
@@ -133,8 +143,10 @@ export default function Authorization() {
             <GoogleLoginButton />
           </GoogleOAuthProvider>
         </form>
-        {errorMessage && (
-          <div className={styles.errorPopup}>{errorMessage}</div>
+        {notification && (
+          <div className={`${styles.notification} ${notification.type}`}>
+            {notification.message}
+          </div>
         )}
       </div>
     </main>

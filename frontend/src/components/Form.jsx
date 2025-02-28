@@ -21,7 +21,7 @@ export function convertToEmoji(countryCode) {
   return String.fromCodePoint(...codePoints);
 }
 
-const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
+const BASE_URL = import.meta.env.VITE_BASE_URL_GOOGLE;
 
 export default function Form() {
   const [lat, lng] = useUrlPosition();
@@ -81,7 +81,6 @@ export default function Form() {
       notes,
       position: { lat: +lat, lng: +lng },
     };
-    // console.log(`New City from form:`, newCity);
     await createCity(newCity);
     navigate("/app/cities");
   }
@@ -119,7 +118,7 @@ export default function Form() {
       </div>
 
       <div className={styles.row}>
-        <label htmlFor="notes">Notes about your trip to {cityName}</label>
+        <label htmlFor="notes">To Do in City {cityName}</label>
         <textarea
           id="notes"
           onChange={(e) => setNotes(e.target.value)}

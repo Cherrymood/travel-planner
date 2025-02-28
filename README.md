@@ -1,6 +1,9 @@
 # Travel Planner
 
 A full-stack application for managing travel destinations, built with **Express.js** (backend) and **React** (frontend). It allows users to organize their travel plans with city management, geolocation, authentication, and interactive maps.
+![screenshot](./frontend/public/main.png)
+![screenshot](./frontend/public/onecity.png)
+![screenshot](./frontend/public/login.png)
 
 ---
 

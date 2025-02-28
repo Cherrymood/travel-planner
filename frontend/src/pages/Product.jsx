@@ -7,7 +7,7 @@ export default function Product() {
     <main className={styles.product}>
       <PageNav />
       <section>
-        <img src="img-4.jpg" alt="map with photoes of travels" />
+        <img src="/img-4.jpg" alt="map with photoes of travels" />
         <div>
           <h2>About Travel planner</h2>
           <p>
